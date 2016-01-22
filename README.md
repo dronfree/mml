@@ -5,5 +5,5 @@ cd postfix && docker build -t postfix .
 ```
 Run container
 ```bash
-docker run -d -p 8025:25 -t postfix
+docker run -d -p 25:25 -t postfix
 ```
