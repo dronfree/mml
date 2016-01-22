@@ -29,15 +29,10 @@ smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
 
 smtpd_relay_restrictions = permit_mynetworks permit_sasl_authenticated defer_unauth_destination
 myhostname = localhost
-#alias_maps = hash:/etc/aliases
-#alias_database = hash:/etc/aliases
-#virtual_alias_domains = 1f540c675410
-#virtual_alias_maps = hash:/etc/postfix/virtual
 
 virtual_mailbox_domains = mail.local
 virtual_mailbox_base = /var/mail/vhosts
 virtual_mailbox_maps = hash:/etc/postfix/vmailbox
-#virtual_transport = lmtp:127.0.0.1:9000
 
 virtual_minimum_uid = 100
 virtual_uid_maps = static:5000
