@@ -1,5 +1,5 @@
 # mml
-Mail for an hour
+Build docker image
 ```bash
 cd postfix && docker build -t postfix .
 ```
