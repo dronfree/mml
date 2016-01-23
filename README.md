@@ -1,9 +1,11 @@
 # mml
-Build docker image
+## Run app
+Copy dist files
 ```bash
-cd postfix && docker build -t postfix .
+cp postfix/main.cf.dist postfix/main.cf
+cp postfix/vmailbox.dist postfix/vmailbox
 ```
-Run container
+Run app
 ```bash
-docker run -d -p 25:25 -t postfix
+./run.sh (arm|amd64)
 ```
