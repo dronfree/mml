@@ -1,0 +1,3 @@
+FROM busybox
+CMD ["mkdir", "-p", "/var/www/data"]
+VOLUME /var/www/data

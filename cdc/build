@@ -1,0 +1,3 @@
+#!/bin/bash
+docker build -f Dockerfile.$1 -t cdc .
+docker run --name cdc -t cdc
