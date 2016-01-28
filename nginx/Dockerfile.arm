@@ -1,0 +1,2 @@
+FROM armhfbuild/nginx
+EXPOSE 80

@@ -1,0 +1,3 @@
+#!/bin/bash
+docker build -f Dockerfile.$1 -t nginx .
+docker run --name nginx --volumes-from front -p 80:80 -d -t nginx
