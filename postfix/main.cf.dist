@@ -31,8 +31,8 @@ smtpd_relay_restrictions = permit_mynetworks permit_sasl_authenticated defer_una
 myhostname = localhost
 
 virtual_mailbox_domains = mail.local
-virtual_mailbox_base = /var/mail/vhosts
-virtual_mailbox_maps = hash:/etc/postfix/vmailbox
+virtual_mailbox_base = /var/www/boxes
+virtual_mailbox_maps = hash:/var/www/data/vmailbox
 
 virtual_minimum_uid = 100
 virtual_uid_maps = static:5000

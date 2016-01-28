@@ -1,0 +1,4 @@
+#!/bin/bash
+docker build -f Dockerfile.$1 -t postfix .
+docker run --name postfix --volumes-from cdc --volumes-from mbs -d -p 25:25 -t postfix
+

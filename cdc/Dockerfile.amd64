@@ -1,3 +1,4 @@
 FROM busybox
 CMD ["mkdir", "-p", "/var/www/data"]
+ADD /vmailbox /var/www/data/vmailbox
 VOLUME /var/www/data
