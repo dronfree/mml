@@ -1,4 +1,4 @@
 FROM busybox
-CMD ["mkdir", "-p", "/var/www/mmlhub.com/public"]
-ADD /public /var/www/mmlhub.com/public
-VOLUME /var/www/mmlhub.com
+CMD ["mkdir", "-p", "/usr/share/nginx/html"]
+ADD /public /usr/share/nginx/html
+VOLUME /usr/share/nginx
