@@ -1,4 +1,6 @@
 #!/bin/bash
+cp cdc/vmailbox.dist cdc/vmailbox
+cp postfix/main.cf.dist postfix/main.cf
 docker rm -f $(docker ps -a -q)
 cd cdc && ./build $1 && cd ..
 cd mbs && ./build $1 && cd ..
