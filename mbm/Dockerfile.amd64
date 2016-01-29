@@ -1,0 +1,4 @@
+FROM ubuntu
+ADD /mbm /var/www/mbm
+ENTRYPOINT /var/www/mbm
+EXPOSE 8080

@@ -1,0 +1,4 @@
+#!/bin/bash
+cp ../bin/mbm mbm
+docker build -f Dockerfile.$1 -t mbm .
+docker run --name mbm --volumes-from cdc -p 8080:8080 -d -t mbm
