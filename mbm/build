@@ -1,4 +1,7 @@
 #!/bin/bash
+export GOROOT=/usr/local/go
+export GOPATH=$(pwd)/..
+/usr/local/go/bin/go install mbm
 cp ../bin/mbm mbm
 docker build -f Dockerfile.$1 -t mbm .
 docker run --name mbm --volumes-from cdc -p 8080:8080 -d -t mbm
