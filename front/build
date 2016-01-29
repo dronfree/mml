@@ -1,3 +1,4 @@
 #!/bin/bash
+docker rm -f front
 docker build -f Dockerfile.$1 -t front .
 docker run --name front -t front

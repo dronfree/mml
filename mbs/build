@@ -1,3 +1,4 @@
 #!/bin/bash
+docker rm -f mbs
 docker build -f Dockerfile.$1 -t mbs .
 docker run --name mbs -t mbs
