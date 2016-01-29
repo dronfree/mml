@@ -3,6 +3,7 @@ cp cdc/vmailbox.dist cdc/vmailbox
 cp postfix/main.cf.dist postfix/main.cf
 docker rm -f postfix
 docker rm -f nginx
+docker rm -f mbm
 docker rm -f front
 docker rm -f mbs
 docker rm -f cdc
@@ -11,3 +12,4 @@ cd mbs && ./build $1 && cd ..
 cd front && ./build $1 && cd ..
 cd nginx && ./build $1 && cd ..
 cd postfix && ./build $1 && cd ..
+cd mbm && ./build $1 && cd ..
