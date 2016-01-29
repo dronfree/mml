@@ -1,4 +1,5 @@
 #!/bin/bash
+docker rm -f mbm
 export GOROOT=/usr/local/go
 export GOPATH=$(pwd)/..
 /usr/local/go/bin/go install mbm
