@@ -9,5 +9,9 @@
 
 ## Run app
 ```bash
-./run (arm|amd64)
+./run (arm|amd64) [mail_box_domains]
+```
+Example
+```bash
+./run amd64 mymail.local
 ```
