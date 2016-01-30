@@ -1,6 +1,9 @@
 #!/bin/bash
 docker rm -f postfix
 cp main.cf.dist main.cf
+if [[ $2 != "" ]]; then
+    sed -i s/mail.local/$2/g main.cf
+fi
 docker build -f Dockerfile.$1 -t postfix .
 docker run --name postfix --volumes-from cdc --volumes-from mbs -d -p 25:25 -t postfix
 
