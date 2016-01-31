@@ -4,10 +4,50 @@ import (
 	"net/http"
 	"log"
 	"html"
+	"flag"
+	"os"
+	"bufio"
+	"io"
+	"strconv"
 )
 
+type Params struct {
+	p int
+	f string
+}
+var params Params
+
+func init() {
+	flag.IntVar(&params.p, "p", 8080, "Port to start app on")
+	flag.StringVar(&params.f, "f", "vmailbox", "Postfix virtual map file")
+}
 
 func main() {
+	var err error
+	var inFile *os.File
+	flag.Parse()
+	if inFile, err = os.Open(params.f); err != nil {
+		log.Fatal(err)
+	}
+	defer inFile.Close()
+	reader := bufio.NewReader(inFile)
+	eof := false
+	for !eof {
+		var line string
+		line, err = reader.ReadString('\n')
+		if err == io.EOF {
+			eof = true
+			continue
+		} else if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Print(line)
+	}
+
+	fmt.Println(params.f)
+	fmt.Println(params.p)
+
+
 	http.HandleFunc("/", func (w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "Welcome from Mail boxes manager")
 	})
@@ -17,5 +57,5 @@ func main() {
 	http.HandleFunc("/mails", func (w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "mails: path %q, query %q", html.EscapeString(r.URL.Path), html.EscapeString(r.URL.RawQuery))
 	})
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Fatal(http.ListenAndServe(":"+strconv.Itoa(params.p), nil))
 }
