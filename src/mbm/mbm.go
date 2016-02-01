@@ -9,6 +9,8 @@ import (
 	"bufio"
 	"io"
 	"strconv"
+	"os/exec"
+	"strings"
 )
 
 type Params struct {
@@ -23,8 +25,12 @@ func init() {
 }
 
 func main() {
-	var err error
-	var inFile *os.File
+	var (
+		err    error
+		inFile *os.File
+		uuid   []byte
+		sessId string
+	)
 	flag.Parse()
 	if inFile, err = os.Open(params.f); err != nil {
 		log.Fatal(err)
@@ -46,6 +52,9 @@ func main() {
 
 	fmt.Println(params.f)
 	fmt.Println(params.p)
+	uuid, err = exec.Command("uuidgen").Output()
+	sessId = strings.Trim(string(uuid), "\n")
+	fmt.Println(sessId)
 
 
 	http.HandleFunc("/", func (w http.ResponseWriter, r *http.Request) {
