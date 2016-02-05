@@ -166,7 +166,7 @@ func expireBox() {
 			if time.Now().After(k.expireAt)  {
 				delete(busy, i)
 				free = append(free, k.box)
-				log.Println(k.box + " expired")
+				log.Println("expired: " + k.box)
 			}
 		}
 		time.Sleep(params.checkexpire)
@@ -176,8 +176,10 @@ func expireBox() {
 func makeFreeAvailable() {
 	for {
 		if len(free) > params.freecapacity {
-			available = append(available, free[0:params.freecapacity-1]...)
+			becomeAvailable := free[0:params.freecapacity-1];
+			available = append(available, becomeAvailable...)
 			free = free[params.freecapacity:]
+			log.Println("become available: ", becomeAvailable)
 		}
 		time.Sleep(params.makefreeavailable)
 	}
