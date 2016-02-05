@@ -14,14 +14,16 @@ import (
 )
 
 type Params struct {
-	p int
-	f string
+	port      int
+	mailboxes string
+	rentfor   int
 }
 var params Params
 
 func init() {
-	flag.IntVar(&params.p, "p", 8080, "Port to start app on")
-	flag.StringVar(&params.f, "f", "vmailbox", "Postfix virtual map file")
+	flag.IntVar(&params.port, "port", 8080, "Port to start app on")
+	flag.StringVar(&params.mailboxes, "mailboxes", "vmailbox", "Postfix virtual map file")
+	flag.IntVar(&params.rentfor, "rentfor", 3600, "Mailbox rent time in seconds")
 }
 
 func main() {
@@ -32,7 +34,7 @@ func main() {
 		sessId string
 	)
 	flag.Parse()
-	if inFile, err = os.Open(params.f); err != nil {
+	if inFile, err = os.Open(params.mailboxes); err != nil {
 		log.Fatal(err)
 	}
 	defer inFile.Close()
@@ -50,8 +52,9 @@ func main() {
 		fmt.Print(line)
 	}
 
-	fmt.Println(params.f)
-	fmt.Println(params.p)
+	fmt.Println(params.mailboxes)
+	fmt.Println(params.port)
+	fmt.Println(params.rentfor)
 	uuid, err = exec.Command("uuidgen").Output()
 	sessId = strings.Trim(string(uuid), "\n")
 	fmt.Println(sessId)
@@ -66,5 +69,5 @@ func main() {
 	http.HandleFunc("/mails", func (w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "mails: path %q, query %q", html.EscapeString(r.URL.Path), html.EscapeString(r.URL.RawQuery))
 	})
-	log.Fatal(http.ListenAndServe(":"+strconv.Itoa(params.p), nil))
+	log.Fatal(http.ListenAndServe(":"+strconv.Itoa(params.port), nil))
 }
