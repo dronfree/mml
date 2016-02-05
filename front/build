@@ -1,4 +1,5 @@
 #!/bin/bash
 docker rm -f front
+wget --output-document public/js/jquery-1.12.0.min.js --quiet http://code.jquery.com/jquery-1.12.0.min.js
 docker build -f Dockerfile.$1 -t front .
 docker run --name front -t front
