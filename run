@@ -1,5 +1,5 @@
 #!/bin/bash
-cd cdc && ./build $1 && cd ..
+cd cdc && ./build $1 $2 && cd ..
 cd mbs && ./build $1 && cd ..
 cd front && ./build $1 && cd ..
 cd mbm && ./build $1 && cd ..

@@ -1,5 +1,8 @@
 #!/bin/bash
 docker rm -f cdc
 cp vmailbox.dist vmailbox
+if [[ $2 != "" ]]; then
+    sed -i s/mail.local/$2/g vmailbox
+fi
 docker build -f Dockerfile.$1 -t cdc .
 docker run --name cdc -t cdc
