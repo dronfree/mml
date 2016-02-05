@@ -48,7 +48,7 @@ func init() {
 	flag.DurationVar(&params.checkexpire, "checkexpire", 5*time.Second, "How often to perform check expire boxes in seconds")
 	flag.IntVar(&params.freecapacity, "freecapacity", 5, "Max number of expired boxes to return to queue")
 	flag.DurationVar(&params.makefreeavailable, "makefreeavailable", 5*time.Second, "How often to perform makefreeavailable")
-	flag.StringVar(&params.mailboxes, "mailboxes", "vmailbox", "Postfix virtual map file")
+	flag.StringVar(&params.mailboxes, "mailboxes", "/var/www/data/vmailbox", "Postfix virtual map file")
 	flag.StringVar(&params.boxpath, "boxpath", "/var/www/boxes", "Path to directory with stored boxes")
 	flag.Int64Var(&params.rentfor, "rentfor", 3600, "Mailbox rent time in seconds")
 }
