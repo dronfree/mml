@@ -5,5 +5,5 @@ export GOPATH=$(pwd)/..
 /usr/local/go/bin/go install mbm
 cp ../bin/mbm mbm
 docker build -f Dockerfile.$1 -t mbm .
-docker run --name mbm --volumes-from cdc -p 8080:8080 -h mbm -d -t mbm
+docker run --name mbm --volumes-from cdc --volumes-from mbs -p 8080:8080 -h mbm -d -t mbm
 docker cp /usr/bin/uuidgen mbm:/usr/bin/uuidgen

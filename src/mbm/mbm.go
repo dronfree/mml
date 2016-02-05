@@ -50,7 +50,7 @@ func init() {
 	flag.DurationVar(&params.makefreeavailable, "makefreeavailable", 5*time.Second, "How often to perform makefreeavailable")
 	flag.StringVar(&params.mailboxes, "mailboxes", "/var/www/data/vmailbox", "Postfix virtual map file")
 	flag.StringVar(&params.boxpath, "boxpath", "/var/www/boxes", "Path to directory with stored boxes")
-	flag.Int64Var(&params.rentfor, "rentfor", 3600, "Mailbox rent time in seconds")
+	flag.Int64Var(&params.rentfor, "rentfor", 300, "Mailbox rent time in seconds")
 }
 
 func SessId() string {
