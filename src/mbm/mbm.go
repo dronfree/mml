@@ -141,7 +141,7 @@ func main() {
 		sessid = sessidArr[0]
 
 		if busyRow, ok = busy[sessid]; !ok || busyRow.box != box {
-			log.Println("sessid of box not match")
+			log.Println("sessid or box not match")
 			return
 		}
 		if inFile, err = os.Open(boxFile(box)); err != nil {
