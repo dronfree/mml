@@ -14,6 +14,9 @@ html,
 body {
   min-height: 100%;
 }
+body.all {
+  background-color: #ecf0f5;
+}
 .layout-boxed html,
 .layout-boxed body {
   height: 100%;
@@ -61,7 +64,7 @@ body {
   -moz-transition: -moz-transform 0.3s ease-in-out, margin 0.3s ease-in-out;
   -o-transition: -o-transform 0.3s ease-in-out, margin 0.3s ease-in-out;
   transition: transform 0.3s ease-in-out, margin 0.3s ease-in-out;
-  margin-left: 230px;
+  /*margin-left: 230px;*/
   z-index: 820;
 }
 .layout-top-nav .content-wrapper,
