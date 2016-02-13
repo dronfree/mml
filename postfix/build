@@ -4,6 +4,11 @@ cp main.cf.dist main.cf
 if [[ $2 != "" ]]; then
     sed -i s/mail.local/$2/g main.cf
 fi
+cp master.cf.dist master.cf
+export GOROOT=/usr/local/go
+export GOPATH=$(pwd)/..
+/usr/local/go/bin/go install maildrop
+cp ../bin/maildrop maildrop
 docker build -f Dockerfile.$1 -t postfix .
 docker run --name postfix --volumes-from cdc --volumes-from mbs -d -p 25:25 -t postfix
 

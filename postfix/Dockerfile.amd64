@@ -1,5 +1,7 @@
 FROM ubuntu
 RUN apt-get update && apt-get install -y postfix
-ADD main.cf /etc/postfix/main.cf
+ADD /main.cf /etc/postfix/main.cf
+ADD /master.cf /etc/postfix/master.cf
+ADD /maildrop /var/www/maildrop
 ENTRYPOINT postmap /var/www/data/vmailbox && /etc/init.d/rsyslog start && postfix start && tail -F /var/log/mail.log
 EXPOSE 25
