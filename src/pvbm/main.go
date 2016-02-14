@@ -43,8 +43,18 @@ func main() {
 	flag.Parse()
 	config.symbols = []byte("abcdefghijklmnopqrstuvwxyz0123456789")
 
-	for i := 0; i < config.count; i++ {
+	emails := make(map[string]bool)
+	for {
+		if(len(emails) >= config.count) {
+			break;
+		}
+
 		name := GenerateRandomString(config.symbols, config.length)
+		if emails[name] {
+			continue
+		}
+
+		emails[name] = true
 		fmt.Println(name + `@` + config.domainName + ` ` + name)
 	}
 }
