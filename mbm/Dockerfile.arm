@@ -1,4 +1,4 @@
 FROM armbuild/ubuntu
 ADD /mbm /var/www/mbm
-ENTRYPOINT /var/www/mbm
+ENTRYPOINT /var/www/mbm -mailboxes=/var/www/data/vmailbox -boxpath=/var/www/boxes
 EXPOSE 8080

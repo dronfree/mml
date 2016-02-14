@@ -12,7 +12,6 @@ import (
 	"strings"
 	"time"
 	"encoding/json"
-	"io/ioutil"
 )
 
 type Params struct {
@@ -35,6 +34,12 @@ type AvailableBox struct {
 type AllBoxBusy struct {
 	Error string
 }
+type JsonMail struct {
+	Date string
+	From string
+	Subject string
+	Body string
+}
 var params Params
 var (
 	available []string
@@ -43,13 +48,12 @@ var (
 )
 
 func init() {
-
 	flag.IntVar(&params.port, "port", 8080, "Port to start app on")
 	flag.DurationVar(&params.checkexpire, "checkexpire", 5*time.Second, "How often to perform check expire boxes in seconds")
 	flag.IntVar(&params.freecapacity, "freecapacity", 5, "Max number of expired boxes to return to queue")
 	flag.DurationVar(&params.makefreeavailable, "makefreeavailable", 5*time.Second, "How often to perform makefreeavailable")
-	flag.StringVar(&params.mailboxes, "mailboxes", "/var/www/data/vmailbox", "Postfix virtual map file")
-	flag.StringVar(&params.boxpath, "boxpath", "/var/www/boxes", "Path to directory with stored boxes")
+	flag.StringVar(&params.mailboxes, "mailboxes", "vmailbox", "Postfix virtual map file")
+	flag.StringVar(&params.boxpath, "boxpath", "boxes", "Path to directory with stored boxes")
 	flag.Int64Var(&params.rentfor, "rentfor", 300, "Mailbox rent time in seconds")
 }
 
@@ -126,8 +130,8 @@ func main() {
 		var busyRow BusyBox
 		var ok bool
 		var err    error
-		var inFile *os.File
-		var content []byte
+		var content []JsonMail
+		var js []byte
 
 		if boxArr, ok = r.URL.Query()["box"]; !ok {
 			log.Println("box paramether not set")
@@ -144,20 +148,45 @@ func main() {
 			log.Println("sessid or box not match")
 			return
 		}
-		if inFile, err = os.Open(boxFile(box)); err != nil {
+		if content, err = readBoxContent(boxFile(box)); err != nil {
 			log.Println(err)
 			return
 		}
-		defer inFile.Close()
-		if content, err = ioutil.ReadAll(bufio.NewReader(inFile)); err != nil {
-			log.Println(err)
-			return
+		if js, err = json.Marshal(content); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
-		w.Write(content);
+		w.Header().Set("Content-Type", "application/json")
+		w.Write(js);
 	})
 	go expireBox()
 	go makeFreeAvailable()
-	http.ListenAndServe(":"+strconv.Itoa(params.port), nil)
+	log.Fatal(http.ListenAndServe(":"+strconv.Itoa(params.port), nil))
+}
+
+func readBoxContent(boxFile string) (mails []JsonMail, err error) {
+	var inFile *os.File
+	if inFile, err = os.Open(boxFile); err != nil {
+		log.Println(err)
+		return
+	}
+	defer inFile.Close()
+	reader := bufio.NewReader(inFile)
+
+	i := 0
+	for {
+		var line []byte
+		line, err = reader.ReadBytes('\n')
+		if err == io.EOF {
+			err = nil
+			break
+		} else if err != nil {
+			return
+		}
+		mails = append(mails, JsonMail{})
+		json.Unmarshal(line, &mails[i])
+		i++
+	}
+	return
 }
 
 func expireBox() {
