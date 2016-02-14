@@ -9,7 +9,7 @@
 
 ## Run app
 ```bash
-./run (arm|amd64) [mail_box_domains]
+./run (arm|amd64) mail_box_domains
 ```
 Example
 ```bash
