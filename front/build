@@ -3,5 +3,8 @@ docker rm -f front
 wget --output-document public/js/jquery-1.12.0.min.js --quiet http://code.jquery.com/jquery-1.12.0.min.js
 wget --output-document public/js/jquery-2.1.4.min.js --quiet http://code.jquery.com/jquery-2.1.4.min.js
 wget --output-document public/css/bootstrap.min.css --quiet https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css
+wget --output-document jquery-template-1.5.0.tar.gz --quiet https://github.com/codepb/jquery-template/archive/1.5.0.tar.gz
+tar -xzf jquery-template-1.5.0.tar.gz
+cp jquery-template-1.5.0/jquery-loadTemplate/jquery.loadTemplate-1.5.0.min.js public/js/jquery.loadTemplate-1.5.0.min.js
 docker build -f Dockerfile.$1 -t front .
 docker run --name front -t front
