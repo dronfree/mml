@@ -5,12 +5,14 @@ $(document).ready(function(){
         }
         else {
             $("#email").text(data.Box);
-            $("#sessid").text(data.Sessid);
             setInterval(function(){
                 $.get("/mbm/mails", {box: data.Box, sessid: data.Sessid})
-                    .done(function(content){
-                        if (content != "") {
-                            $("#content").text(content)
+                    .done(function(data){
+                        if (data != "" && data.length != $("#inboxAmount").text()) {
+                            $("#emptybox").hide();
+                            $("#template-container").loadTemplate($("#template"), data);
+                            $("#inboxAmount").text(data.length);
+                            console.log(data, data.length)
                         }
                     })
             }, 5000);

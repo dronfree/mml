@@ -3,14 +3,22 @@ package main
 import (
 	"os"
 	"bufio"
-	"io/ioutil"
 	"log"
 	"flag"
+	"net/mail"
+	"io/ioutil"
+	"encoding/json"
 )
 
 type Params struct {
 	mailboxBase string
 	mailbox string
+}
+type JsonMail struct {
+	Date string
+	From string
+	Subject string
+	Body string
 }
 var params Params
 
@@ -25,12 +33,26 @@ func main() {
 	var outFile = os.Stdout
 	var inFile = os.Stdin
 	var reader = bufio.NewReader(inFile)
-	var content []byte
-	if content, err = ioutil.ReadAll(reader); err != nil {
+	var msg *mail.Message
+	var jsMail JsonMail
+
+	if msg, err = mail.ReadMessage(reader); err != nil {
 		log.Fatal(err)
 	}
 
-	content = append(content, []byte("\n\nmy custom delimiter\n\n")...)
+	header := msg.Header
+	body, err := ioutil.ReadAll(msg.Body)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	jsMail = JsonMail{header.Get("Date"), header.Get("From"), header.Get("Subject"), string(body)}
+	js, err := json.Marshal(jsMail)
+	if err != nil {
+		log.Fatal(err)
+	}
+	js = append(js, '\n')
+
 	box := params.mailboxBase + `/` + params.mailbox
 
 	if outFile, err = os.OpenFile(box, os.O_APPEND | os.O_CREATE | os.O_WRONLY, 0666); err != nil {
@@ -38,7 +60,7 @@ func main() {
 	}
 	defer outFile.Close();
 	var writer = bufio.NewWriter(outFile)
-	if _, err = writer.Write(content); err != nil {
+	if _, err = writer.Write(js); err != nil {
 		log.Fatal(err)
 	}
 	writer.Flush()
