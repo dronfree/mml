@@ -4,7 +4,13 @@ $(document).ready(function(){
             $("#error").text(data.Error)
         }
         else {
-            $("#email").text(data.Box);
+            $(".el-email").each(function() {
+                $(this).text(data.Box);
+                if($(this).is('a')) {
+                    $(this).attr("href", "mailto:" + data.Box);
+                }
+            });
+
             setInterval(function(){
                 $.get("/mbm/mails", {box: data.Box, sessid: data.Sessid})
                     .done(function(data){
