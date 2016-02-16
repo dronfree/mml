@@ -1,4 +1,6 @@
 $(document).ready(function(){
+    new Clipboard('.clipboard');
+
     $.get("/mbm/box", function(data){
         if (data.Error) {
             $("#error").text(data.Error)

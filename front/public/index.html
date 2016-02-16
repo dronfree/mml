@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="/css/AdminLTE.css">
+    <script src="https://cdn.rawgit.com/zenorocha/clipboard.js/v1.5.5/dist/clipboard.min.js"></script>
 </head>
 <body class="skin-blue all">
 <div class="wrapper">
@@ -31,7 +32,7 @@
                             <h3 class="box-title el-email" id="email"></h3>
                         </div>
                     </div><!-- /.box -->
-                    <a href="#" class="btn btn-primary btn-block margin-bottom" title="copy to clipboard">Copy address to clipboard</a>
+                    <a href="javascript:void(0)" class="btn btn-primary btn-block margin-bottom clipboard" title="Copy to clipboard" data-clipboard-target="#email">Copy address to clipboard</a>
                     <div class="box box-solid">
                         <div class="box-header with-border">
                             <h3 class="box-title">Folders</h3>
