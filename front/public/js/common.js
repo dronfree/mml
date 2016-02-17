@@ -18,7 +18,7 @@ $(document).ready(function(){
                     .done(function(data){
                         if (data != "" && data.length != $("#inboxAmount").text()) {
                             $("#emptybox").hide();
-                            $("#template-container").html("").loadTemplate($("#template"), data.reverse());
+                            $("#template-container").loadTemplate($("#template"), data.reverse());
                             $("#inboxAmount").text(data.length);
                             console.log(data, data.length)
                         }
