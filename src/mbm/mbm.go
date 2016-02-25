@@ -14,6 +14,8 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/mail"
+	"mime"
+	"mime/multipart"
 )
 
 type Params struct {
@@ -40,7 +42,8 @@ type JsonMail struct {
 	Date string
 	From string
 	Subject string
-	Body string
+	BodyText string
+	BodyHtml string
 }
 var params Params
 var (
@@ -179,7 +182,10 @@ func readBoxContent(boxPath string) (mails []JsonMail, err error) {
 	for _, file = range files {
 		var msg *mail.Message
 		var boxFile string
-		var jsMail JsonMail
+		var mediaType string
+		var params map[string]string
+		var htmlBody []byte
+		var textBody []byte
 
 		boxFile = boxPath + `/` + file.Name()
 		if inFile, err = os.Open(boxFile); err != nil {
@@ -193,12 +199,49 @@ func readBoxContent(boxPath string) (mails []JsonMail, err error) {
 			return
 		}
 		header := msg.Header
-		body, err := ioutil.ReadAll(msg.Body)
-		if err != nil {
+		if mediaType, params, err = mime.ParseMediaType(header.Get("Content-Type")); err != nil {
 			log.Println(err)
+			return
 		}
-		jsMail = JsonMail{file.ModTime().String(), header.Get("From"), header.Get("Subject"), string(body)}
-		mails = append(mails, jsMail)
+		if strings.HasPrefix(mediaType, "multipart/") {
+			mr := multipart.NewReader(msg.Body, params["boundary"])
+			for {
+				var p *multipart.Part
+				p, err = mr.NextPart()
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					log.Println(err)
+					return
+				}
+				if mediaType, params, err = mime.ParseMediaType(p.Header.Get("Content-Type")); err != nil {
+					log.Println(err)
+					return
+				}
+				if mediaType == "text/html" {
+					htmlBody, err = ioutil.ReadAll(p)
+					if err != nil {
+						log.Println(err)
+						return
+					}
+				}
+				if mediaType == "text/plain" {
+					textBody, err = ioutil.ReadAll(p)
+					if err != nil {
+						log.Println(err)
+						return
+					}
+				}
+			}
+			mails = append(mails, JsonMail{file.ModTime().String(), header.Get("From"), header.Get("Subject"), string(textBody), string(htmlBody)})
+		} else {
+			body, err := ioutil.ReadAll(msg.Body)
+			if err != nil {
+				log.Println(err)
+			}
+			mails = append(mails, JsonMail{file.ModTime().String(), header.Get("From"), header.Get("Subject"), string(body), ""})
+		}
 	}
 	return
 }
