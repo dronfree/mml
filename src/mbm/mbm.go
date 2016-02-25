@@ -12,6 +12,8 @@ import (
 	"strings"
 	"time"
 	"encoding/json"
+	"io/ioutil"
+	"net/mail"
 )
 
 type Params struct {
@@ -117,7 +119,7 @@ func main() {
 			if js, err = json.Marshal(availableBox); err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 			}
-			if err = os.Remove(boxFile(box)); err != nil {
+			if err = os.RemoveAll(boxFile(box)); err != nil {
 				log.Println(err)
 			}
 		}
@@ -163,28 +165,40 @@ func main() {
 	log.Fatal(http.ListenAndServe(":"+strconv.Itoa(params.port), nil))
 }
 
-func readBoxContent(boxFile string) (mails []JsonMail, err error) {
-	var inFile *os.File
-	if inFile, err = os.Open(boxFile); err != nil {
+func readBoxContent(boxPath string) (mails []JsonMail, err error) {
+	var (
+		files []os.FileInfo
+		file  os.FileInfo
+		inFile *os.File
+	)
+	boxPath += `/new`
+	if files, err = ioutil.ReadDir(boxPath); err != nil {
 		log.Println(err)
 		return
 	}
-	defer inFile.Close()
-	reader := bufio.NewReader(inFile)
+	for _, file = range files {
+		var msg *mail.Message
+		var boxFile string
+		var jsMail JsonMail
 
-	i := 0
-	for {
-		var line []byte
-		line, err = reader.ReadBytes('\n')
-		if err == io.EOF {
-			err = nil
-			break
-		} else if err != nil {
+		boxFile = boxPath + `/` + file.Name()
+		if inFile, err = os.Open(boxFile); err != nil {
+			log.Println(err)
 			return
 		}
-		mails = append(mails, JsonMail{})
-		json.Unmarshal(line, &mails[i])
-		i++
+		defer inFile.Close()
+		reader := bufio.NewReader(inFile)
+		if msg, err = mail.ReadMessage(reader); err != nil {
+			log.Println(err)
+			return
+		}
+		header := msg.Header
+		body, err := ioutil.ReadAll(msg.Body)
+		if err != nil {
+			log.Println(err)
+		}
+		jsMail = JsonMail{file.ModTime().String(), header.Get("From"), header.Get("Subject"), string(body)}
+		mails = append(mails, jsMail)
 	}
 	return
 }
