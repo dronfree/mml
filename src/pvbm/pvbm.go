@@ -59,6 +59,6 @@ func main() {
 		}
 
 		emails[name] = true
-		fmt.Println(name + `@` + config.domainName + ` ` + name)
+		fmt.Println(name + `@` + config.domainName + ` ` + name + `/`)
 	}
 }

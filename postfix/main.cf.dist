@@ -32,9 +32,12 @@ myhostname = localhost
 
 virtual_mailbox_domains = mail.local
 virtual_mailbox_maps = hash:/var/www/data/vmailbox
-virtual_transport = maildrop
+virtual_mailbox_base = /var/www/boxes
+#virtual_transport = maildrop
 
 virtual_minimum_uid = 100
+virtual_uid_maps = static:5000
+virtual_gid_maps = static:5000
 inet_protocols = ipv4
 
 mydestination = localhost.localdomain, , localhost
