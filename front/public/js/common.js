@@ -20,7 +20,6 @@ $(document).ready(function(){
                             $("#emptybox").hide();
                             $("#template-container").loadTemplate($("#template"), data.reverse());
                             $("#inboxAmount").text(data.length);
-                            console.log(data, data.length)
                         }
                     })
             }, 5000);

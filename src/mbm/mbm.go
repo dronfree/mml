@@ -14,6 +14,8 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/mail"
+	"mime"
+	"mime/multipart"
 )
 
 type Params struct {
@@ -40,6 +42,8 @@ type JsonMail struct {
 	Date string
 	From string
 	Subject string
+	BodyText string
+	BodyHtml string
 	Body string
 }
 var params Params
@@ -151,7 +155,7 @@ func main() {
 			return
 		}
 		if content, err = readBoxContent(boxFile(box)); err != nil {
-			log.Println(err)
+			log.Println(`ERROR: reading box content`, err)
 			return
 		}
 		if js, err = json.Marshal(content); err != nil {
@@ -179,7 +183,11 @@ func readBoxContent(boxPath string) (mails []JsonMail, err error) {
 	for _, file = range files {
 		var msg *mail.Message
 		var boxFile string
-		var jsMail JsonMail
+		var mediaType string
+		var params map[string]string
+		var htmlBody []byte
+		var textBody []byte
+		var defaultBody []byte
 
 		boxFile = boxPath + `/` + file.Name()
 		if inFile, err = os.Open(boxFile); err != nil {
@@ -193,12 +201,57 @@ func readBoxContent(boxPath string) (mails []JsonMail, err error) {
 			return
 		}
 		header := msg.Header
-		body, err := ioutil.ReadAll(msg.Body)
-		if err != nil {
-			log.Println(err)
+		if mediaType, params, err = mime.ParseMediaType(header.Get("Content-Type")); err != nil {
+			log.Println(`ERROR: parsing Content-Type of mail`, err)
+			err = nil
 		}
-		jsMail = JsonMail{file.ModTime().String(), header.Get("From"), header.Get("Subject"), string(body)}
-		mails = append(mails, jsMail)
+		if len(mediaType) != 0 && strings.HasPrefix(mediaType, "multipart/") {
+			mr := multipart.NewReader(msg.Body, params["boundary"])
+			for {
+				var p *multipart.Part
+				p, err = mr.NextPart()
+				if err == io.EOF {
+					log.Println(`NOTICE: End of multipart mail reached`)
+					err = nil
+					break
+				}
+				if err != nil {
+					log.Println(`ERROR: getting next part of multipart mail`, err)
+					return
+				}
+				if mediaType, params, err = mime.ParseMediaType(p.Header.Get("Content-Type")); err != nil {
+					log.Println(`ERROR: parsing Content-Type of part`, err)
+					return
+				}
+				if mediaType == "text/html" {
+					htmlBody, err = ioutil.ReadAll(p)
+					if err != nil {
+						log.Println(`ERROR: reading html part`, err)
+						return
+					}
+				}
+				if mediaType == "text/plain" {
+					textBody, err = ioutil.ReadAll(p)
+					if err != nil {
+						log.Println(`ERROR: reading text part`, err)
+						return
+					}
+				}
+			}
+			if len(htmlBody) != 0 {
+				defaultBody = htmlBody
+			} else {
+				defaultBody = textBody
+			}
+			mails = append(mails, JsonMail{file.ModTime().String(), header.Get("From"), header.Get("Subject"), string(textBody), string(htmlBody), string(defaultBody)})
+		} else {
+			body, err := ioutil.ReadAll(msg.Body)
+			if err != nil {
+				log.Println(`ERROR: reading non multipart mail body`, err)
+			}
+			b := `<pre>` + string(body) + `</pre>`
+			mails = append(mails, JsonMail{file.ModTime().String(), header.Get("From"), header.Get("Subject"), b, "", b})
+		}
 	}
 	return
 }
