@@ -9,6 +9,7 @@ import (
 	"strings"
 	"mime/multipart"
 	"io"
+	"errors"
 )
 
 type JsonMail struct {
@@ -20,6 +21,72 @@ type JsonMail struct {
 	Body string
 }
 
+
+func IsMultiPart(msg *mail.Message) bool {
+	mediaType, _, err := mime.ParseMediaType(msg.Header.Get("Content-Type"))
+	if  err != nil {
+		return false
+	}
+	return strings.HasPrefix(mediaType, `multipart/`)
+}
+
+func GetBoundary(msg *mail.Message) (boundary string, err error) {
+	_, params, err := mime.ParseMediaType(msg.Header.Get("Content-Type"))
+	if err != nil {
+		return "", err
+	}
+	if _, ok := params["boundary"]; !ok {
+		return "", errors.New("Boundary not found")
+	}
+	return params["boundary"], nil
+}
+
+func ReadMultiPartMail(msg *mail.Message) (email JsonMail, err error) {
+	boundary, err := GetBoundary(msg)
+	if err != nil {
+		return JsonMail{}, err
+	}
+	mr := multipart.NewReader(msg.Body, boundary)
+	for {
+		p, err := mr.NextPart()
+		if err == io.EOF {
+			log.Println(`NOTICE: End of multipart mail reached`)
+			break
+		}
+		if err != nil {
+			log.Println(`ERROR: getting next part of multipart mail`, err)
+			continue
+		}
+		mediaType, _, err := mime.ParseMediaType(p.Header.Get("Content-Type"))
+		if err != nil {
+			log.Println(`ERROR: parsing Content-Type of part`, err)
+			continue
+		}
+		if mediaType == "text/html" {
+			htmlBody, err := ioutil.ReadAll(p)
+			if err != nil {
+				log.Println(`ERROR: reading html part`, err)
+				continue
+			}
+			email.BodyHtml = string(htmlBody)
+		}
+		if mediaType == "text/plain" {
+			textBody, err := ioutil.ReadAll(p)
+			if err != nil {
+				log.Println(`ERROR: reading text part`, err)
+				continue
+			}
+			email.BodyText = string(textBody)
+		}
+	}
+	if len(email.BodyHtml) != 0 {
+		email.Body = email.BodyHtml
+	} else {
+		email.Body = email.BodyText
+	}
+	email.From = msg.Header.Get("From")
+	return email, nil
+}
 
 func Read(boxPath string) (mails []JsonMail, err error) {
 	var (
@@ -35,67 +102,31 @@ func Read(boxPath string) (mails []JsonMail, err error) {
 	for _, file = range files {
 		var msg *mail.Message
 		var boxFile string
-		var mediaType string
-		var params map[string]string
-		var htmlBody []byte
-		var textBody []byte
-		var defaultBody []byte
 
 		boxFile = boxPath + `/` + file.Name()
-		if inFile, err = os.Open(boxFile); err != nil {
+		inFile, err = os.Open(boxFile)
+		if err != nil {
 			log.Println(err)
-			return
+			return nil, err
 		}
 		defer inFile.Close()
+
 		reader := bufio.NewReader(inFile)
-		if msg, err = mail.ReadMessage(reader); err != nil {
+		msg, err := mail.ReadMessage(reader)
+		if err != nil {
 			log.Println(err)
-			return
+			return nil, err
 		}
+
 		header := msg.Header
-		if mediaType, params, err = mime.ParseMediaType(header.Get("Content-Type")); err != nil {
-			log.Println(`ERROR: parsing Content-Type of mail`, err)
-			err = nil
-		}
-		if len(mediaType) != 0 && strings.HasPrefix(mediaType, "multipart/") {
-			mr := multipart.NewReader(msg.Body, params["boundary"])
-			for {
-				var p *multipart.Part
-				p, err = mr.NextPart()
-				if err == io.EOF {
-					log.Println(`NOTICE: End of multipart mail reached`)
-					err = nil
-					break
-				}
-				if err != nil {
-					log.Println(`ERROR: getting next part of multipart mail`, err)
-					return
-				}
-				if mediaType, params, err = mime.ParseMediaType(p.Header.Get("Content-Type")); err != nil {
-					log.Println(`ERROR: parsing Content-Type of part`, err)
-					return
-				}
-				if mediaType == "text/html" {
-					htmlBody, err = ioutil.ReadAll(p)
-					if err != nil {
-						log.Println(`ERROR: reading html part`, err)
-						return
-					}
-				}
-				if mediaType == "text/plain" {
-					textBody, err = ioutil.ReadAll(p)
-					if err != nil {
-						log.Println(`ERROR: reading text part`, err)
-						return
-					}
-				}
+		if IsMultiPart(msg) {
+			email, err := ReadMultiPartMail(msg)
+			if err != nil {
+				log.Println(err)
+				continue
 			}
-			if len(htmlBody) != 0 {
-				defaultBody = htmlBody
-			} else {
-				defaultBody = textBody
-			}
-			mails = append(mails, JsonMail{file.ModTime().String(), header.Get("From"), header.Get("Subject"), string(textBody), string(htmlBody), string(defaultBody)})
+			email.Date = file.ModTime().String()
+			mails = append(mails, email)
 		} else {
 			body, err := ioutil.ReadAll(msg.Body)
 			if err != nil {

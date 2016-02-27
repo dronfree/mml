@@ -1,0 +1,12 @@
+Return-Path: <user@local>
+X-Original-To: m2h@mail.local
+Delivered-To: m2h@mail.local
+Received: from unknown (unknown [172.17.0.1])
+        by localhost (Postfix) with SMTP id 11DDB121
+        for <m2h@mail.local>; Sat, 27 Feb 2016 09:38:47 +0000 (UTC)
+Subject: test subject
+From: user@local
+
+Mail body line 1
+Second line
+Line number 3
