@@ -32,7 +32,7 @@ func getMailFromFile(filePath string) (*mail.Message, error) {
 }
 
 func TestIsMultiPart01(t *testing.T) {
-	eml := "./testdata/multipart.eml"
+	eml := "./testdata/new/multipart.eml"
 	mail, _ := getMailFromFile(eml)
 	result := IsMultiPart(mail)
 	if !result {
@@ -41,7 +41,7 @@ func TestIsMultiPart01(t *testing.T) {
 }
 
 func TestIsMultiPart02(t *testing.T) {
-	eml := "./testdata/nonmultipart.eml"
+	eml := "./testdata/new/nonmultipart.eml"
 	mail, _ := getMailFromFile(eml)
 	result := IsMultiPart(mail)
 	if result {
@@ -50,7 +50,7 @@ func TestIsMultiPart02(t *testing.T) {
 }
 
 func TestGetBoundary01(t *testing.T) {
-	eml := "./testdata/multipart.eml"
+	eml := "./testdata/new/multipart.eml"
 	mail, _ := getMailFromFile(eml)
 	boundary, err := GetBoundary(mail)
 	if boundary == "" || err != nil {
@@ -59,7 +59,7 @@ func TestGetBoundary01(t *testing.T) {
 }
 
 func TestGetBoundary02(t *testing.T) {
-	eml := "./testdata/nonmultipart.eml"
+	eml := "./testdata/new/nonmultipart.eml"
 	mail, _ := getMailFromFile(eml)
 	boundary, err := GetBoundary(mail)
 	if boundary != "" || err == nil {
@@ -68,7 +68,7 @@ func TestGetBoundary02(t *testing.T) {
 }
 
 func TestGetBoundary03(t *testing.T) {
-	eml := "./testdata/multipart-no-boundary.eml"
+	eml := "./testdata/new/multipart-no-boundary.eml"
 	mail, _ := getMailFromFile(eml)
 	boundary, err := GetBoundary(mail)
 	if boundary != "" || err == nil {
@@ -78,7 +78,7 @@ func TestGetBoundary03(t *testing.T) {
 
 func TestReadMultiPartMail01(t *testing.T) {
 
-	eml := "./testdata/multipart.eml"
+	eml := "./testdata/new/multipart.eml"
 	mail, _ := getMailFromFile(eml)
 	json, err := ReadMultiPartMail(mail)
 	if err != nil {
@@ -119,7 +119,7 @@ alex`,
 
 func TestReadMultiPartMail02(t *testing.T) {
 
-	eml := "./testdata/multipart-plain-text-only.eml"
+	eml := "./testdata/new/multipart-plain-text-only.eml"
 	mail, _ := getMailFromFile(eml)
 	json, err := ReadMultiPartMail(mail)
 	if err != nil {
