@@ -6,6 +6,7 @@ import (
 	"bufio"
 	"io/ioutil"
 	"strings"
+	"log"
 )
 
 func getMailFromFile(filePath string) (*mail.Message, error) {
@@ -161,4 +162,14 @@ alex`,
 
 }
 
+func TestRead01(t *testing.T) {
+	mails, err := Read("./testdata")
+	if err != nil {
+		log.Fatal(err)
+	}
+	master := 3
+	if len(mails) != master {
+		t.Errorf("Read(%q) count returned mails == %v, want %v", "./testdata", len(mails), master)
+	}
 
+}
