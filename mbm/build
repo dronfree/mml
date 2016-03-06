@@ -2,6 +2,8 @@
 docker rm -f mbm
 export GOROOT=/usr/local/go
 export GOPATH=$(pwd)/..
+/usr/local/go/bin/go test -coverprofile ../front/public/cover/mailbox.out mailbox
+/usr/local/go/bin/go tool cover -html=../front/public/cover/mailbox.out -o ../front/public/cover/mailbox.html
 /usr/local/go/bin/go install mbm
 cp ../bin/mbm mbm
 docker build -f Dockerfile.$1 -t mbm .
