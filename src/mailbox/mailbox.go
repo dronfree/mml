@@ -50,7 +50,6 @@ func ReadMultiPartMail(msg *mail.Message) (email JsonMail, err error) {
 	for {
 		p, err := mr.NextPart()
 		if err == io.EOF {
-			log.Println(`NOTICE: End of multipart mail reached`)
 			break
 		}
 		if err != nil {
@@ -68,7 +67,7 @@ func ReadMultiPartMail(msg *mail.Message) (email JsonMail, err error) {
 				log.Println(`ERROR: reading html part`, err)
 				continue
 			}
-			email.BodyHtml = string(htmlBody)
+			email.BodyHtml = strings.Trim(string(htmlBody),"\n")
 		}
 		if mediaType == "text/plain" {
 			textBody, err := ioutil.ReadAll(p)
@@ -76,7 +75,7 @@ func ReadMultiPartMail(msg *mail.Message) (email JsonMail, err error) {
 				log.Println(`ERROR: reading text part`, err)
 				continue
 			}
-			email.BodyText = string(textBody)
+			email.BodyText = strings.Trim(string(textBody),"\n")
 		}
 	}
 	if len(email.BodyHtml) != 0 {
@@ -85,6 +84,8 @@ func ReadMultiPartMail(msg *mail.Message) (email JsonMail, err error) {
 		email.Body = email.BodyText
 	}
 	email.From = msg.Header.Get("From")
+	email.Date = msg.Header.Get("Date")
+	email.Subject = msg.Header.Get("Subject")
 	return email, nil
 }
 
