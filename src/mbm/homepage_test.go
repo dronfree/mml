@@ -20,8 +20,8 @@ var _ = Describe("Homepage", func() {
 		Expect(page.Destroy()).To(Succeed())
 	})
 
-	It("should access homepage", func(){
-		By("accessing homepage", func(){
+	It("should access homepage", func() {
+		By("accessing homepage", func() {
 			Expect(page.Navigate("http://localhost/")).To(Succeed())
 			Expect(page).To(HaveURL("http://localhost/"))
 		})
