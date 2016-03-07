@@ -31,5 +31,5 @@ sudo ln -s /usr/local/share/chromedriver /usr/bin/chromedriver
 
 #running tests
 go test mbm
-go test
+go test mailbox
 ```
