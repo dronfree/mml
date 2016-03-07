@@ -15,3 +15,21 @@ Example
 ```bash
 ./run amd64 mymail.local
 ```
+## Testing
+```bash
+# getting agouti
+go get github.com/sclevine/agouti
+go get github.com/onsi/ginkgo/ginkgo
+go get github.com/onsi/gomega
+
+#installing chromedriver
+wget http://chromedriver.storage.googleapis.com/2.21/chromedriver_linux64.zip
+unzip chromedriver_linux64.zip
+sudo mv -f chromedriver /usr/local/share/chromedriver
+sudo ln -s /usr/local/share/chromedriver /usr/local/bin/chromedriver
+sudo ln -s /usr/local/share/chromedriver /usr/bin/chromedriver
+
+#running tests
+go test mbm
+go test
+```
