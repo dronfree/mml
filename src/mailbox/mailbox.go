@@ -10,6 +10,7 @@ import (
 	"mime/multipart"
 	"io"
 	"errors"
+	"encoding/base64"
 )
 
 type JsonMail struct {
@@ -67,7 +68,14 @@ func ReadMultiPartMail(msg *mail.Message) (email JsonMail, err error) {
 				log.Println(`ERROR: reading html part`, err)
 				continue
 			}
-			email.BodyHtml = strings.Trim(string(htmlBody),"\n")
+			if "base64" == p.Header.Get("Content-Transfer-Encoding") {
+				htmlBody, err = base64.StdEncoding.DecodeString(string(htmlBody))
+				if err != nil {
+					log.Println(`ERROR: decoding base64`, err)
+					continue
+				}
+			}
+			email.BodyHtml = strings.Trim(string(htmlBody), "\n")
 		}
 		if mediaType == "text/plain" {
 			textBody, err := ioutil.ReadAll(p)
@@ -75,7 +83,14 @@ func ReadMultiPartMail(msg *mail.Message) (email JsonMail, err error) {
 				log.Println(`ERROR: reading text part`, err)
 				continue
 			}
-			email.BodyText = strings.Trim(string(textBody),"\n")
+			if "base64" == p.Header.Get("Content-Transfer-Encoding") {
+				textBody, err = base64.StdEncoding.DecodeString(string(textBody))
+				if err != nil {
+					log.Println(`ERROR: decoding base64`, err)
+					continue
+				}
+			}
+			email.BodyText = strings.Trim(string(textBody), "\r\n")
 		}
 	}
 	if len(email.BodyHtml) != 0 {
