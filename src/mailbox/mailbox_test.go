@@ -162,12 +162,42 @@ alex`,
 
 }
 
+func TestReadMultiPartMail03(t *testing.T) {
+	eml := "./testdata/new/russian.eml"
+	mail, _ := getMailFromFile(eml)
+	json, err := ReadMultiPartMail(mail)
+	if err != nil {
+		t.Errorf("ReadMultiPartMail(%q) == ERROR, err %v", eml, err)
+	}
+	master := JsonMail{
+		"Thu, 25 Feb 2016 20:15:28 +0300",
+		"User Name <user@gmail.com>",
+	    "Русское письмо",
+		"Это тело русского письма.\r\n\r\nС уважением,\r\nАлексей",
+		"<div dir=\"ltr\">Это тело русского письма.<div><br></div><div>С уважением,</div><div>Алексей</div></div>\r",
+		"<div dir=\"ltr\">Это тело русского письма.<div><br></div><div>С уважением,</div><div>Алексей</div></div>\r",
+	}
+
+	if json.Subject != master.Subject {
+		t.Errorf("ReadMultiPartMail(%q) returned JsonMail.Subject == %q, want %q", eml, json.Subject, master.Subject)
+	}
+	if json.BodyHtml != master.BodyHtml {
+		t.Errorf("ReadMultiPartMail(%q) returned JsonMail.BodyHtml == %q, want %q", eml, json.BodyHtml, master.BodyHtml)
+	}
+	if json.BodyText != master.BodyText {
+		t.Errorf("ReadMultiPartMail(%q) returned JsonMail.BodyText == %q, want %q", eml, json.BodyText, master.BodyText)
+	}
+	if json.Body != master.Body {
+		t.Errorf("ReadMultiPartMail(%q) returned JsonMail.Body == %q, want %q", eml, json.Body, master.Body)
+	}
+}
+
 func TestRead01(t *testing.T) {
 	mails, err := Read("./testdata")
 	if err != nil {
 		log.Fatal(err)
 	}
-	master := 3
+	master := 4
 	if len(mails) != master {
 		t.Errorf("Read(%q) count returned mails == %v, want %v", "./testdata", len(mails), master)
 	}
