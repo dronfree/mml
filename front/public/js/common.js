@@ -1,4 +1,5 @@
-$(document).ready(function(){
+$(document).ready(function() {
+    $('.timer').startTimer();
     new Clipboard('.clipboard');
 
     $.get("/mbm/box", function(data){
