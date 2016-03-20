@@ -101,6 +101,10 @@ func ReadMultiPartMail(msg *mail.Message) (email JsonMail, err error) {
 	email.From = msg.Header.Get("From")
 	email.Date = msg.Header.Get("Date")
 	email.Subject = msg.Header.Get("Subject")
+	decoder := new(mime.WordDecoder)
+	if decodedSubject, err := decoder.Decode(email.Subject); err == nil {
+		email.Subject = decodedSubject
+	}
 	return email, nil
 }
 

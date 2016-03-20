@@ -163,7 +163,6 @@ alex`,
 }
 
 func TestReadMultiPartMail03(t *testing.T) {
-
 	eml := "./testdata/new/russian.eml"
 	mail, _ := getMailFromFile(eml)
 	json, err := ReadMultiPartMail(mail)
@@ -173,34 +172,24 @@ func TestReadMultiPartMail03(t *testing.T) {
 	master := JsonMail{
 		"Thu, 25 Feb 2016 20:15:28 +0300",
 		"User Name <user@gmail.com>",
-	    "test subject",
-"Это тело русского письма.\r\n\r\nС уважением,\r\nАлексей",
-		``,
-`test mail body
-
-regards,
-alex`,
+	    "Русское письмо",
+		"Это тело русского письма.\r\n\r\nС уважением,\r\nАлексей",
+		"<div dir=\"ltr\">Это тело русского письма.<div><br></div><div>С уважением,</div><div>Алексей</div></div>\r",
+		"<div dir=\"ltr\">Это тело русского письма.<div><br></div><div>С уважением,</div><div>Алексей</div></div>\r",
 	}
 
-	//if json.Date != master.Date {
-	//	t.Errorf("ReadMultiPartMail(%q) returned JsonMail.Date == %q, want %q", eml, json.Date, master.Date)
-	//}
-	//if json.From != master.From {
-	//	t.Errorf("ReadMultiPartMail(%q) returned JsonMail.From == %q, want %q", eml, json.From, master.From)
-	//}
-	//if json.Subject != master.Subject {
-	//	t.Errorf("ReadMultiPartMail(%q) returned JsonMail.Subject == %q, want %q", eml, json.Subject, master.Subject)
-	//}
-	//if json.BodyHtml != master.BodyHtml {
-	//	t.Errorf("ReadMultiPartMail(%q) returned JsonMail.BodyHtml == %q, want %q", eml, json.BodyHtml, master.BodyHtml)
-	//}
+	if json.Subject != master.Subject {
+		t.Errorf("ReadMultiPartMail(%q) returned JsonMail.Subject == %q, want %q", eml, json.Subject, master.Subject)
+	}
+	if json.BodyHtml != master.BodyHtml {
+		t.Errorf("ReadMultiPartMail(%q) returned JsonMail.BodyHtml == %q, want %q", eml, json.BodyHtml, master.BodyHtml)
+	}
 	if json.BodyText != master.BodyText {
 		t.Errorf("ReadMultiPartMail(%q) returned JsonMail.BodyText == %q, want %q", eml, json.BodyText, master.BodyText)
 	}
-	//if json.Body != master.Body {
-	//	t.Errorf("ReadMultiPartMail(%q) returned JsonMail.Body == %q, want %q", eml, json.Body, master.Body)
-	//}
-
+	if json.Body != master.Body {
+		t.Errorf("ReadMultiPartMail(%q) returned JsonMail.Body == %q, want %q", eml, json.Body, master.Body)
+	}
 }
 
 func TestRead01(t *testing.T) {
