@@ -4,5 +4,9 @@ cp main.cf.dist main.cf
 sed -i s/mail.local/$2/g main.cf
 cp master.cf.dist master.cf
 docker build -f Dockerfile.$1 -t postfix .
-docker run --name postfix --volumes-from cdc --volumes-from mbs -d -p 25:25 -t postfix
+POSTFIX_PORT="25"
+if [ "$4" != "" ]; then
+    POSTFIX_PORT=$4
+fi
+docker run --name postfix --volumes-from cdc --volumes-from mbs -d -p $POSTFIX_PORT:25 -t postfix
 
