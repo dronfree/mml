@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="/css/AdminLTE.css">
+    <link rel="stylesheet" href="/css/common.css">
 </head>
 <body class="skin-blue all">
 <div class="wrapper">
@@ -39,6 +40,16 @@
                         <div class="box-body no-padding">
                             <ul class="nav nav-pills nav-stacked">
                                 <li><a href="javascript:void(0)"><i class="fa fa-envelope-o"></i> Inbox <span class="label label-warning pull-right" id="inboxAmount">0</span></a></li>
+                            </ul>
+                        </div><!-- /.box-body -->
+                    </div><!-- /. box -->
+                    <div class="box box-solid">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Your box expires in</h3>
+                        </div>
+                        <div class="box-body no-padding">
+                            <ul class="nav nav-pills nav-stacked">
+                                <li><a href="javascript:void(0)"><i class="fa fa-clock-o"></i> <span class="timer"></span></a></li>
                             </ul>
                         </div><!-- /.box-body -->
                     </div><!-- /. box -->
@@ -69,6 +80,7 @@
         </div><!-- /.box-body -->
     </div><!-- /. box -->
 </script>
+<script src="/js/jquery.simple.timer.js"></script>
 <script src="/js/common.js"></script>
 <script src="https://cdn.rawgit.com/zenorocha/clipboard.js/v1.5.5/dist/clipboard.min.js"></script>
 </body>

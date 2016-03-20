@@ -1,4 +1,5 @@
-$(document).ready(function(){
+$(document).ready(function() {
+
     new Clipboard('.clipboard');
 
     $.get("/mbm/box", function(data){
@@ -12,6 +13,9 @@ $(document).ready(function(){
                     $(this).attr("href", "mailto:" + data.Box);
                 }
             });
+
+            $(".timer").data("seconds-left", data.ExpiresIn);
+            $('.timer').startTimer();
 
             setInterval(function(){
                 $.get("/mbm/mails", {box: data.Box, sessid: data.Sessid})
