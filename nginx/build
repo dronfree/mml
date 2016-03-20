@@ -3,4 +3,8 @@ docker rm -f mmlnginx
 cp default.conf.dist default.conf
 MBMIP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' mbm)
 docker build -f Dockerfile.$1 -t mmlnginx .
-docker run --name mmlnginx --add-host mbm:$MBMIP --volumes-from front -p 80:80 -d -t mmlnginx
+NGINX_PORT="80"
+if [ "$3" != "" ]; then
+    NGINX_PORT=$3
+fi
+docker run --name mmlnginx --add-host mbm:$MBMIP --volumes-from front -p $NGINX_PORT:80 -d -t mmlnginx

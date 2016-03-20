@@ -9,11 +9,11 @@
 
 ## Run app
 ```bash
-./run (arm|amd64) mail_box_domains
+./run (arm|amd64) [mailbox_domain] [nginx_port] [postfix_port] [mbm_port]
 ```
 Example
 ```bash
-./run amd64 mymail.local
+./run amd64 mymail.local 80 25 8080
 ```
 ## Testing
 ```bash
