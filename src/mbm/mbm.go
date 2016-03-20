@@ -31,6 +31,7 @@ type BusyBox struct {
 type AvailableBox struct {
 	Box    string
 	Sessid string
+	ExpiresIn int64
 }
 type AllBoxBusy struct {
 	Error string
@@ -49,7 +50,7 @@ func init() {
 	flag.DurationVar(&params.makefreeavailable, "makefreeavailable", 5*time.Second, "How often to perform makefreeavailable")
 	flag.StringVar(&params.mailboxes, "mailboxes", "vmailbox", "Postfix virtual map file")
 	flag.StringVar(&params.boxpath, "boxpath", "boxes", "Path to directory with stored boxes")
-	flag.Int64Var(&params.rentfor, "rentfor", 300, "Mailbox rent time in seconds")
+	flag.Int64Var(&params.rentfor, "rentfor", 3600, "Mailbox rent time in seconds")
 }
 
 func SessId() string {
@@ -108,7 +109,7 @@ func main() {
 			sessId := SessId()
 			busy[sessId] = BusyBox{box, time.Now().Add(time.Duration(1e9 * params.rentfor))}
 
-			availableBox := AvailableBox{box, sessId}
+			availableBox := AvailableBox{box, sessId, params.rentfor}
 			if js, err = json.Marshal(availableBox); err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 			}
