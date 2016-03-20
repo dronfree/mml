@@ -33,3 +33,8 @@ sudo ln -s /usr/local/share/chromedriver /usr/bin/chromedriver
 go test mbm
 go test mailbox
 ```
+## Developing front
+```bash
+docker pull nginx
+docker run --name nginx-for-front -d -p 8090:80 -v /home/you/workspace/mml/front/public:/usr/share/nginx/html:ro nginx
+```
