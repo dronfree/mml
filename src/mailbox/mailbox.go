@@ -14,6 +14,7 @@ import (
 )
 
 type JsonMail struct {
+	Id string
 	Date string
 	From string
 	Subject string
@@ -99,7 +100,6 @@ func ReadMultiPartMail(msg *mail.Message) (email JsonMail, err error) {
 		email.Body = email.BodyText
 	}
 	email.From = msg.Header.Get("From")
-	email.Date = msg.Header.Get("Date")
 	email.Subject = msg.Header.Get("Subject")
 	decoder := new(mime.WordDecoder)
 	if decodedSubject, err := decoder.Decode(email.Subject); err == nil {
@@ -139,22 +139,24 @@ func Read(boxPath string) (mails []JsonMail, err error) {
 		}
 
 		header := msg.Header
+		var email JsonMail
 		if IsMultiPart(msg) {
-			email, err := ReadMultiPartMail(msg)
+			email, err = ReadMultiPartMail(msg)
 			if err != nil {
 				log.Println(err)
 				continue
 			}
 			email.Date = file.ModTime().String()
-			mails = append(mails, email)
+			email.Id = file.Name()
 		} else {
 			body, err := ioutil.ReadAll(msg.Body)
 			if err != nil {
 				log.Println(`ERROR: reading non multipart mail body`, err)
 			}
 			b := `<pre>` + string(body) + `</pre>`
-			mails = append(mails, JsonMail{file.ModTime().String(), header.Get("From"), header.Get("Subject"), b, "", b})
+			email = JsonMail{file.Name(), file.ModTime().String(), header.Get("From"), header.Get("Subject"), b, "", b}
 		}
+		mails = append(mails, email)
 	}
 	return
 }
