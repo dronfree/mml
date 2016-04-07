@@ -33,7 +33,7 @@ func getMailFromFile(filePath string) (*mail.Message, error) {
 }
 
 func TestIsMultiPart01(t *testing.T) {
-	eml := "./testdata/new/multipart.eml"
+	eml := "./testdata/new/001-multipart.eml"
 	mail, _ := getMailFromFile(eml)
 	result := IsMultiPart(mail)
 	if !result {
@@ -42,7 +42,7 @@ func TestIsMultiPart01(t *testing.T) {
 }
 
 func TestIsMultiPart02(t *testing.T) {
-	eml := "./testdata/new/nonmultipart.eml"
+	eml := "./testdata/new/004-nonmultipart.eml"
 	mail, _ := getMailFromFile(eml)
 	result := IsMultiPart(mail)
 	if result {
@@ -51,7 +51,7 @@ func TestIsMultiPart02(t *testing.T) {
 }
 
 func TestGetBoundary01(t *testing.T) {
-	eml := "./testdata/new/multipart.eml"
+	eml := "./testdata/new/001-multipart.eml"
 	mail, _ := getMailFromFile(eml)
 	boundary, err := GetBoundary(mail)
 	if boundary == "" || err != nil {
@@ -60,7 +60,7 @@ func TestGetBoundary01(t *testing.T) {
 }
 
 func TestGetBoundary02(t *testing.T) {
-	eml := "./testdata/new/nonmultipart.eml"
+	eml := "./testdata/new/004-nonmultipart.eml"
 	mail, _ := getMailFromFile(eml)
 	boundary, err := GetBoundary(mail)
 	if boundary != "" || err == nil {
@@ -69,7 +69,7 @@ func TestGetBoundary02(t *testing.T) {
 }
 
 func TestGetBoundary03(t *testing.T) {
-	eml := "./testdata/new/multipart-no-boundary.eml"
+	eml := "./testdata/new/002-multipart-no-boundary.eml"
 	mail, _ := getMailFromFile(eml)
 	boundary, err := GetBoundary(mail)
 	if boundary != "" || err == nil {
@@ -79,13 +79,14 @@ func TestGetBoundary03(t *testing.T) {
 
 func TestReadMultiPartMail01(t *testing.T) {
 
-	eml := "./testdata/new/multipart.eml"
+	eml := "./testdata/new/001-multipart.eml"
 	mail, _ := getMailFromFile(eml)
 	json, err := ReadMultiPartMail(mail)
 	if err != nil {
 		t.Errorf("ReadMultiPartMail(%q) == ERROR, err %v", eml, err)
 	}
 	master := JsonMail{
+		"",
 		"Thu, 25 Feb 2016 20:15:28 +0300",
 		"User Name <user@gmail.com>",
 	    "test subject",
@@ -97,9 +98,6 @@ alex`,
 		`<div dir="ltr">test mail body<div><br></div><div>regards,</div><div>alex</div></div>`,
 	}
 
-	if json.Date != master.Date {
-		t.Errorf("ReadMultiPartMail(%q) returned JsonMail.Date == %q, want %q", eml, json.Date, master.Date)
-	}
 	if json.From != master.From {
 		t.Errorf("ReadMultiPartMail(%q) returned JsonMail.From == %q, want %q", eml, json.From, master.From)
 	}
@@ -120,14 +118,15 @@ alex`,
 
 func TestReadMultiPartMail02(t *testing.T) {
 
-	eml := "./testdata/new/multipart-plain-text-only.eml"
+	eml := "./testdata/new/003-multipart-plain-text-only.eml"
 	mail, _ := getMailFromFile(eml)
 	json, err := ReadMultiPartMail(mail)
 	if err != nil {
 		t.Errorf("ReadMultiPartMail(%q) == ERROR, err %v", eml, err)
 	}
 	master := JsonMail{
-		"Thu, 25 Feb 2016 20:15:28 +0300",
+		"",
+		"",
 		"User Name <user@gmail.com>",
 	    "test subject",
 `test mail body
@@ -141,9 +140,6 @@ regards,
 alex`,
 	}
 
-	if json.Date != master.Date {
-		t.Errorf("ReadMultiPartMail(%q) returned JsonMail.Date == %q, want %q", eml, json.Date, master.Date)
-	}
 	if json.From != master.From {
 		t.Errorf("ReadMultiPartMail(%q) returned JsonMail.From == %q, want %q", eml, json.From, master.From)
 	}
@@ -163,13 +159,14 @@ alex`,
 }
 
 func TestReadMultiPartMail03(t *testing.T) {
-	eml := "./testdata/new/russian.eml"
+	eml := "./testdata/new/005-russian.eml"
 	mail, _ := getMailFromFile(eml)
 	json, err := ReadMultiPartMail(mail)
 	if err != nil {
 		t.Errorf("ReadMultiPartMail(%q) == ERROR, err %v", eml, err)
 	}
 	master := JsonMail{
+		"",
 		"Thu, 25 Feb 2016 20:15:28 +0300",
 		"User Name <user@gmail.com>",
 	    "Русское письмо",
@@ -197,9 +194,37 @@ func TestRead01(t *testing.T) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	master := 4
-	if len(mails) != master {
-		t.Errorf("Read(%q) count returned mails == %v, want %v", "./testdata", len(mails), master)
+	masterCount := 5-1
+	if len(mails) != masterCount {
+		t.Errorf("Read(%q) count returned mails == %v, want %v", "./testdata", len(mails), masterCount)
+	}
+
+	master := JsonMail{
+		"",
+		"Thu, 25 Feb 2016 20:15:28 +0300",
+		"User Name <user@gmail.com>",
+		"test subject",
+		"test mail body\n\nregards,\nalex",
+		`<div dir="ltr">test mail body<div><br></div><div>regards,</div><div>alex</div></div>`,
+		`<div dir="ltr">test mail body<div><br></div><div>regards,</div><div>alex</div></div>`,
+	}
+	eml := `001-multipart.eml`
+	json := mails[0]
+
+	if json.From != master.From {
+		t.Errorf("ReadMultiPartMail(%q) returned JsonMail.From == %q, want %q", eml, json.From, master.From)
+	}
+	if json.Subject != master.Subject {
+		t.Errorf("ReadMultiPartMail(%q) returned JsonMail.Subject == %q, want %q", eml, json.Subject, master.Subject)
+	}
+	if json.BodyHtml != master.BodyHtml {
+		t.Errorf("ReadMultiPartMail(%q) returned JsonMail.BodyHtml == %q, want %q", eml, json.BodyHtml, master.BodyHtml)
+	}
+	if json.BodyText != master.BodyText {
+		t.Errorf("ReadMultiPartMail(%q) returned JsonMail.BodyText == %q, want %q", eml, json.BodyText, master.BodyText)
+	}
+	if json.Body != master.Body {
+		t.Errorf("ReadMultiPartMail(%q) returned JsonMail.Body == %q, want %q", eml, json.Body, master.Body)
 	}
 
 }

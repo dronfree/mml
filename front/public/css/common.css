@@ -1,3 +1,6 @@
 .timer div {
     display: inline-block;
 }
+.mailbox-controls {
+    padding: 5px 10px;
+}
