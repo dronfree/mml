@@ -13,6 +13,9 @@ import (
 	"time"
 	"encoding/json"
 	"mailbox"
+	"net/url"
+	"errors"
+	"io/ioutil"
 )
 
 type Params struct {
@@ -121,29 +124,17 @@ func main() {
 		w.Write(js);
 	})
 	http.HandleFunc("/mails", func (w http.ResponseWriter, r *http.Request) {
-		var boxArr, sessidArr []string
-		var box, sessid string
-		var busyRow BusyBox
-		var ok bool
+		var box string
 		var err    error
 		var content []mailbox.JsonMail
 		var js []byte
 
-		if boxArr, ok = r.URL.Query()["box"]; !ok {
-			log.Println("box paramether not set")
+		box, _, _, err = validateRequest(r.URL.Query(), busy)
+		if err != nil {
+			log.Println(err)
 			return
 		}
-		if sessidArr, ok = r.URL.Query()["sessid"]; !ok {
-			log.Println("sessid paramether not set")
-			return
-		}
-		box = boxArr[0]
-		sessid = sessidArr[0]
 
-		if busyRow, ok = busy[sessid]; !ok || busyRow.box != box {
-			log.Println("sessid or box not match")
-			return
-		}
 		if content, err = mailbox.Read(boxFile(box)); err != nil {
 			log.Println(`ERROR: reading box content`, err)
 			return
@@ -154,9 +145,52 @@ func main() {
 		w.Header().Set("Content-Type", "application/json")
 		w.Write(js);
 	})
+	http.HandleFunc("/mail", func (w http.ResponseWriter, r *http.Request) {
+		var box, id string
+		var err error
+		var content []byte
+
+		box, _, id, err = validateRequest(r.URL.Query(), busy)
+		if err != nil {
+			return
+		}
+		content, err = ioutil.ReadFile(boxFile(box) + "/new" + "/" + id)
+		if err != nil {
+			return
+		}
+		w.Header().Set("Content-Type", "text/plain")
+		w.Write(content)
+	})
 	go expireBox()
 	go makeFreeAvailable()
 	log.Fatal(http.ListenAndServe(":"+strconv.Itoa(params.port), nil))
+}
+
+func validateRequest(values url.Values, busyBoxes map[string]BusyBox) (box string, sessid string, id string, err error) {
+	var (
+		boxArr, sessidArr, idArr []string
+	    ok bool
+	    busyRow BusyBox
+	)
+
+	if boxArr, ok = values["box"]; !ok {
+		return "", "", "", errors.New("box paramether not set")
+	}
+	if sessidArr, ok = values["sessid"]; !ok {
+		return "", "", "", errors.New("sessid paramether not set")
+	}
+	box = boxArr[0]
+	sessid = sessidArr[0]
+	if busyRow, ok = busyBoxes[sessid]; !ok || busyRow.box != box {
+		return "", "", "", errors.New("sessid or box not match")
+	}
+	idArr, ok = values["id"]
+	if !ok {
+		return box, sessid, "", nil
+	}
+	id = idArr[0]
+
+	return box, sessid, id, nil
 }
 
 func expireBox() {
