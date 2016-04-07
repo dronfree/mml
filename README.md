@@ -37,4 +37,8 @@ go test mailbox
 ```bash
 docker pull nginx
 docker run --name nginx-for-front -d -p 8090:80 -v /home/you/workspace/mml/front/public:/usr/share/nginx/html:ro nginx
+cp dev/nginx-for-front.conf.dist dev/nginx-for-front.conf
+# put your <mbm-container-IP-172.17.0.2> in dev/nginx-for-front.conf
+docker cp dev/nginx-for-front.conf nginx-for-front:/etc/nginx/conf.d/default.conf
+docker exec -t nginx-for-front service nginx reload
 ```
