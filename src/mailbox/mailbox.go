@@ -13,6 +13,7 @@ import (
 	"encoding/base64"
 	"golang.org/x/text/encoding/charmap"
 	"fmt"
+	"time"
 )
 
 type JsonMail struct {
@@ -163,7 +164,7 @@ func Read(boxPath string) (mails []JsonMail, err error) {
 				log.Println(err)
 				continue
 			}
-			email.Date = file.ModTime().String()
+			email.Date = file.ModTime().Format(time.UnixDate)
 			email.Id = file.Name()
 		} else {
 			body, err := ioutil.ReadAll(msg.Body)
