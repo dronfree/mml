@@ -1,0 +1,72 @@
+Return-Path: <user@mail.com>
+X-Original-To: i96@mmlhub.com
+Delivered-To: i96@mmlhub.com
+Received: from mx3.veeam.com (unknown [212.68.12.74])
+	by localhost (Postfix) with ESMTPS id B1925120
+	for <i96@mmlhub.com>; Thu,  5 May 2016 15:13:52 +0000 (UTC)
+Received: from mail.veeam.com (spbxmb02.amust.local [172.17.17.6])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mx3.veeam.com (Postfix) with ESMTPS id 10044280189
+	for <i96@mmlhub.com>; Thu,  5 May 2016 18:13:50 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=veeam.com; s=mx3;
+	t=1462461230; bh=15waDQzO/6lvBBviqjHwJgkrY4NKwvCeGrMN/s9tJS8=;
+	h=From:To:Subject:Date:From;
+	b=1yJ10a2MDqMIuUug5rTMY/9TXwCSNIqUkQMkxakbpy8OXWxZtVlM2fdVTO9o3oJWX
+	 jZ63rymO3q1HX8wZIbVgJJUG1QaAfa1WRzoiXJxF833cxsfFIYsWeEIeWFsfbdU+xi
+	 E1zpq+l7YaJD5tLTIPGXo1mCwk/yTwXEhobDocCI=
+Received: from SPBXMB01.amust.local (172.17.17.8) by SPBXMB02.amust.local
+ (172.17.17.6) with Microsoft SMTP Server (TLS) id 15.0.1130.7; Thu, 5 May
+ 2016 18:13:49 +0300
+Received: from SPBXMB01.amust.local ([fe80::2c97:9c81:15c2:4b43]) by
+ SPBXMB01.amust.local ([fe80::2c97:9c81:15c2:4b43%12]) with mapi id
+ 15.00.1130.005; Thu, 5 May 2016 18:13:49 +0300
+From: User <user@mail.com>
+To: "i96@mmlhub.com" <i96@mmlhub.com>
+Subject: =?koi8-r?B?9MXT1M/XwdEg1MXNwSDQydPYzcE=?=
+Thread-Topic: =?koi8-r?B?9MXT1M/XwdEg1MXNwSDQydPYzcE=?=
+Thread-Index: AQHRpuC57GL61swZ5EGWfwFNQkJkzg==
+Date: Thu, 5 May 2016 15:13:48 +0000
+Message-ID: <8d78e16b66274c148970d34abe4fc6e5@SPBXMB01.amust.local>
+Accept-Language: ru-RU, en-US
+Content-Language: ru-RU
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [46.32.67.148]
+Content-Type: multipart/alternative;
+	boundary="_000_8d78e16b66274c148970d34abe4fc6e5SPBXMB01amustlocal_"
+MIME-Version: 1.0
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.14 (mx3.veeam.com [172.21.224.8]); Thu, 05 May 2016 18:13:50 +0300 (MSK)
+X-Greylist: DOMAIN:'spbxmb02.amust.local' HELO:'mail.veeam.com' FROM:'Aleksey.Andronov@veeam.com' RCPT:'i96@mmlhub.com', SPF error
+X-Veeam-MailScanner-Information: Please contact Veeam.Admins.Worldwide@veeam.com if you have any problems
+X-Veeam-MailScanner-ID: 10044280189.AB41C
+X-Veeam-MailScanner: Found to be clean
+X-Veeam-MailScanner-SpamCheck:
+X-Veeam-MailScanner-From: aleksey.andronov@veeam.com
+X-Spam-Status: No
+
+--_000_8d78e16b66274c148970d34abe4fc6e5SPBXMB01amustlocal_
+Content-Type: text/plain; charset="koi8-r"
+Content-Transfer-Encoding: quoted-printable
+
+?=F4=C5=D3=D4=CF=D7=CF=C5 =D4=C5=CC=CF =D0=C9=D3=D8=CD=C1.
+
+--_000_8d78e16b66274c148970d34abe4fc6e5SPBXMB01amustlocal_
+Content-Type: text/html; charset="koi8-r"
+Content-Transfer-Encoding: quoted-printable
+
+<html>
+<head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dkoi8-r">
+<style type=3D"text/css" style=3D"display:none"><!-- p { margin-top: 0px; m=
+argin-bottom: 0px; }--></style>
+</head>
+<body dir=3D"ltr" style=3D"font-size:12pt;color:#000000;background-color:#F=
+FFFFF;font-family:Calibri,Arial,Helvetica,sans-serif;">
+<p>&#8203;=F4=C5=D3=D4=CF=D7=CF=C5 =D4=C5=CC=CF =D0=C9=D3=D8=CD=C1.<br>
+</p>
+</body>
+</html>
+
+--_000_8d78e16b66274c148970d34abe4fc6e5SPBXMB01amustlocal_--

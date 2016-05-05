@@ -11,6 +11,8 @@ import (
 	"io"
 	"errors"
 	"encoding/base64"
+	"golang.org/x/text/encoding/charmap"
+	"fmt"
 )
 
 type JsonMail struct {
@@ -58,13 +60,21 @@ func ReadMultiPartMail(msg *mail.Message) (email JsonMail, err error) {
 			log.Println(`ERROR: getting next part of multipart mail`, err)
 			continue
 		}
-		mediaType, _, err := mime.ParseMediaType(p.Header.Get("Content-Type"))
+		mediaType, params, err := mime.ParseMediaType(p.Header.Get("Content-Type"))
 		if err != nil {
 			log.Println(`ERROR: parsing Content-Type of part`, err)
 			continue
 		}
+
+		var bodyReader io.Reader = p;
+		if charset, ok := params["charset"]; ok {
+			if ("koi8-r" == charset) {
+				bodyReader = charmap.KOI8R.NewDecoder().Reader(p)
+			}
+		}
+
 		if mediaType == "text/html" {
-			htmlBody, err := ioutil.ReadAll(p)
+			htmlBody, err := ioutil.ReadAll(bodyReader)
 			if err != nil {
 				log.Println(`ERROR: reading html part`, err)
 				continue
@@ -79,7 +89,7 @@ func ReadMultiPartMail(msg *mail.Message) (email JsonMail, err error) {
 			email.BodyHtml = strings.Trim(string(htmlBody), "\n")
 		}
 		if mediaType == "text/plain" {
-			textBody, err := ioutil.ReadAll(p)
+			textBody, err := ioutil.ReadAll(bodyReader)
 			if err != nil {
 				log.Println(`ERROR: reading text part`, err)
 				continue
@@ -102,7 +112,14 @@ func ReadMultiPartMail(msg *mail.Message) (email JsonMail, err error) {
 	email.From = msg.Header.Get("From")
 	email.Subject = msg.Header.Get("Subject")
 	decoder := new(mime.WordDecoder)
-	if decodedSubject, err := decoder.Decode(email.Subject); err == nil {
+	decoder.CharsetReader = func(charset string, input io.Reader) (io.Reader, error) {
+		if "koi8-r" == charset {
+			return charmap.KOI8R.NewDecoder().Reader(input), nil
+		}
+		return nil, fmt.Errorf("unhandled charset for subject %q", charset)
+	}
+	decodedSubject, err := decoder.Decode(email.Subject)
+	if err == nil {
 		email.Subject = decodedSubject
 	}
 	return email, nil

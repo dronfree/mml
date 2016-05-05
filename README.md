@@ -32,6 +32,8 @@ sudo ln -s /usr/local/share/chromedriver /usr/bin/chromedriver
 # running tests
 go test mbm
 go test mailbox
+# running only one test (in general "-run" flag equals regexp)
+go test -run=TestReadMultiPartMail04 mailbox
 ```
 ## Developing front
 ```bash
