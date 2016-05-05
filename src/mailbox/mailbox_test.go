@@ -189,12 +189,44 @@ func TestReadMultiPartMail03(t *testing.T) {
 	}
 }
 
+func TestReadMultiPartMail04(t *testing.T) {
+	eml := "./testdata/new/006-outlook.eml"
+	mail, _ := getMailFromFile(eml)
+	json, err := ReadMultiPartMail(mail)
+	if err != nil {
+		t.Errorf("ReadMultiPartMail(%q) == ERROR, err %v", eml, err)
+	}
+	master := JsonMail{
+		"",
+		"",
+		"",
+		"Тестовая тема письма",
+		"?Тестовое тело письма.",
+		"<html>\n<head>\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=koi8-r\">\n<style type=\"text/css\" style=\"display:none\"><!-- p { margin-top: 0px; margin-bottom: 0px; }--></style>\n</head>\n<body dir=\"ltr\" style=\"font-size:12pt;color:#000000;background-color:#FFFFFF;font-family:Calibri,Arial,Helvetica,sans-serif;\">\n<p>&#8203;Тестовое тело письма.<br>\n</p>\n</body>\n</html>",
+		"<html>\n<head>\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=koi8-r\">\n<style type=\"text/css\" style=\"display:none\"><!-- p { margin-top: 0px; margin-bottom: 0px; }--></style>\n</head>\n<body dir=\"ltr\" style=\"font-size:12pt;color:#000000;background-color:#FFFFFF;font-family:Calibri,Arial,Helvetica,sans-serif;\">\n<p>&#8203;Тестовое тело письма.<br>\n</p>\n</body>\n</html>",
+	}
+
+	if json.Subject != master.Subject {
+		t.Errorf("ReadMultiPartMail(%q) returned JsonMail.Subject == %q, want %q", eml, json.Subject, master.Subject)
+	}
+	if json.BodyHtml != master.BodyHtml {
+		t.Errorf("ReadMultiPartMail(%q) returned JsonMail.BodyHtml == %q, want %q", eml, json.BodyHtml, master.BodyHtml)
+	}
+	if json.BodyText != master.BodyText {
+		t.Errorf("ReadMultiPartMail(%q) returned JsonMail.BodyText == %q, want %q", eml, json.BodyText, master.BodyText)
+	}
+	if json.Body != master.Body {
+		t.Errorf("ReadMultiPartMail(%q) returned JsonMail.Body == %q, want %q", eml, json.Body, master.Body)
+	}
+}
+
+
 func TestRead01(t *testing.T) {
 	mails, err := Read("./testdata")
 	if err != nil {
 		log.Fatal(err)
 	}
-	masterCount := 5-1
+	masterCount := 6-1
 	if len(mails) != masterCount {
 		t.Errorf("Read(%q) count returned mails == %v, want %v", "./testdata", len(mails), masterCount)
 	}
