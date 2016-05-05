@@ -226,7 +226,7 @@ func TestRead01(t *testing.T) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	masterCount := 6-1
+	masterCount := 7-1
 	if len(mails) != masterCount {
 		t.Errorf("Read(%q) count returned mails == %v, want %v", "./testdata", len(mails), masterCount)
 	}

@@ -172,7 +172,7 @@ func Read(boxPath string) (mails []JsonMail, err error) {
 				log.Println(`ERROR: reading non multipart mail body`, err)
 			}
 			b := `<pre>` + string(body) + `</pre>`
-			email = JsonMail{file.Name(), file.ModTime().String(), header.Get("From"), header.Get("Subject"), b, "", b}
+			email = JsonMail{file.Name(), file.ModTime().Format(time.UnixDate), header.Get("From"), header.Get("Subject"), b, "", b}
 		}
 		mails = append(mails, email)
 	}
