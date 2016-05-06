@@ -1,4 +1,4 @@
-Return-Path: <konstantin.perminov@veeam.com>
+Return-Path: <user@mail.com>
 X-Original-To: 672@mmlhub.com
 Delivered-To: 672@mmlhub.com
 Received: from mx3.veeam.com (unknown [212.68.12.74])
@@ -21,7 +21,7 @@ Received: from SPBXMB01.amust.local (172.17.17.8) by SPBXMB01.amust.local
 Received: from SPBXMB01.amust.local ([fe80::2c97:9c81:15c2:4b43]) by
  SPBXMB01.amust.local ([fe80::2c97:9c81:15c2:4b43%12]) with mapi id
  15.00.1130.005; Thu, 5 May 2016 21:38:51 +0300
-From: Konstantin Perminov <Konstantin.Perminov@veeam.com>
+From: User Name <user@mail.com>
 To: "672@mmlhub.com" <672@mmlhub.com>
 Subject: =?utf-8?B?0J/RgNC40JLQldGC0LjQqdCVISBNZWR2ZWRpc2hlIQ==?=
 Thread-Topic: =?utf-8?B?0J/RgNC40JLQldGC0LjQqdCVISBNZWR2ZWRpc2hlIQ==?=
@@ -40,12 +40,12 @@ Content-ID: <9019273730AF434E91121091C6BA2C48@veeam.com>
 Content-Transfer-Encoding: base64
 MIME-Version: 1.0
 X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.14 (mx3.veeam.com [172.21.224.8]); Thu, 05 May 2016 21:38:52 +0300 (MSK)
-X-Greylist: DOMAIN:'spbxmb01.amust.local' HELO:'mail.veeam.com' FROM:'Konstantin.Perminov@veeam.com' RCPT:'672@mmlhub.com', SPF error
+X-Greylist: DOMAIN:'spbxmb01.amust.local' HELO:'mail.veeam.com' FROM:'User.Name@veeam.com' RCPT:'672@mmlhub.com', SPF error
 X-Veeam-MailScanner-Information: Please contact Veeam.Admins.Worldwide@veeam.com if you have any problems
 X-Veeam-MailScanner-ID: 26C2428009F.AD16B
 X-Veeam-MailScanner: Found to be clean
 X-Veeam-MailScanner-SpamCheck:
-X-Veeam-MailScanner-From: konstantin.perminov@veeam.com
+X-Veeam-MailScanner-From: User.Name@veeam.com
 X-Spam-Status: No
 
 CUdIQkROVMKxDQpafit+X+KJoOKAk86pzqnOqeKJiMOnzqniiYjDp86peA0KDQoNCtCc0JXQlNCS
