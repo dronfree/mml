@@ -220,13 +220,35 @@ func TestReadMultiPartMail04(t *testing.T) {
 	}
 }
 
+func TestReadMultiPartMail05(t *testing.T) {
+	eml := "./testdata/new/008-utf8-encoded-from.eml"
+	mail, _ := getMailFromFile(eml)
+	json, err := ReadMultiPartMail(mail)
+	if err != nil {
+		t.Errorf("ReadMultiPartMail(%q) == ERROR, err %v", eml, err)
+	}
+	master := JsonMail{
+		"",
+		"",
+		"Команда SEMrush <mail@semrush.com>",
+		"",
+		"",
+		"",
+		"",
+	}
+
+	if json.From != master.From {
+		t.Errorf("ReadMultiPartMail(%q) returned JsonMail.Subject == %q, want %q", eml, json.From, master.From)
+	}
+}
+
 
 func TestRead01(t *testing.T) {
 	mails, err := Read("./testdata")
 	if err != nil {
 		log.Fatal(err)
 	}
-	masterCount := 8-1
+	masterCount := 9-1
 	if len(mails) != masterCount {
 		t.Errorf("Read(%q) count returned mails == %v, want %v", "./testdata", len(mails), masterCount)
 	}
@@ -285,5 +307,27 @@ func TestReadPlainMail01(t *testing.T) {
 	}
 	if json.Body != master.Body {
 		t.Errorf("ReadMultiPartMail(%q) returned JsonMail.Body == %q, want %q", eml, json.Body, master.Body)
+	}
+}
+
+func TestReadPlainMail02(t *testing.T) {
+	eml := "./testdata/new/009-encoded-plain-and-from.eml"
+	mail, _ := getMailFromFile(eml)
+	json, err := ReadPlainMail(mail)
+	if err != nil {
+		t.Errorf("ReadMultiPartMail(%q) == ERROR, err %v", eml, err)
+	}
+	master := JsonMail{
+		"",
+		"",
+		"Команда SEMrush",
+		"",
+		"",
+		"",
+		"",
+	}
+
+	if json.From != master.From {
+		t.Errorf("ReadMultiPartMail(%q) returned JsonMail.Subject == %q, want %q", eml, json.From, master.From)
 	}
 }

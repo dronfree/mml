@@ -117,6 +117,18 @@ func ReadMultiPartMail(msg *mail.Message) (email JsonMail, err error) {
 	if err == nil {
 		email.Subject = decodedSubject
 	}
+	decodedFrom, err := decoder.Decode(email.From)
+	if err != nil {
+		parts := strings.Split(email.From, " ")
+		for i, part := range parts {
+			decodedPart, err := decoder.Decode(part)
+			if err == nil {
+				parts[i] = decodedPart
+			}
+		}
+		decodedFrom = strings.Join(parts, " ")
+	}
+	email.From = decodedFrom
 	return email, nil
 }
 
@@ -145,10 +157,21 @@ func ReadPlainMail(msg *mail.Message) (email JsonMail, err error) {
 	if err == nil {
 		subject = decodedSubject
 	}
+	decodedFrom, err := decoder.Decode(msg.Header.Get("From"))
+	if err != nil {
+		parts := strings.Split(email.From, " ")
+		for i, part := range parts {
+			decodedPart, err := decoder.Decode(part)
+			if err == nil {
+				parts[i] = decodedPart
+			}
+		}
+		decodedFrom = strings.Join(parts, " ")
+	}
+	email.From = decodedFrom
 	email.Subject = subject
 	email.BodyText = b
-	email.Body = b;
-	email.From = msg.Header.Get("From");
+	email.Body = b
 	return email, nil
 }
 
