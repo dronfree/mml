@@ -226,7 +226,7 @@ func TestRead01(t *testing.T) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	masterCount := 6-1
+	masterCount := 7-1
 	if len(mails) != masterCount {
 		t.Errorf("Read(%q) count returned mails == %v, want %v", "./testdata", len(mails), masterCount)
 	}
@@ -258,5 +258,32 @@ func TestRead01(t *testing.T) {
 	if json.Body != master.Body {
 		t.Errorf("ReadMultiPartMail(%q) returned JsonMail.Body == %q, want %q", eml, json.Body, master.Body)
 	}
+}
 
+func TestReadPlainMail01(t *testing.T) {
+	eml := "./testdata/new/007-encoded-plain.eml"
+	mail, _ := getMailFromFile(eml)
+	json, err := ReadPlainMail(mail)
+	if err != nil {
+		t.Errorf("ReadMultiPartMail(%q) == ERROR, err %v", eml, err)
+	}
+	master := JsonMail{
+		"",
+		"",
+		"",
+		"ПриВЕтиЩЕ! Medvedishe!",
+		"<pre>\tGHBDNT±\r\nZ~+~_≠–ΩΩΩ≈çΩ≈çΩx\r\n\r\n\r\nМЕДВЕД!</pre>",
+		"",
+		"<pre>\tGHBDNT±\r\nZ~+~_≠–ΩΩΩ≈çΩ≈çΩx\r\n\r\n\r\nМЕДВЕД!</pre>",
+	}
+
+	if json.Subject != master.Subject {
+		t.Errorf("ReadMultiPartMail(%q) returned JsonMail.Subject == %q, want %q", eml, json.Subject, master.Subject)
+	}
+	if json.BodyText != master.BodyText {
+		t.Errorf("ReadMultiPartMail(%q) returned JsonMail.BodyText == %q, want %q", eml, json.BodyText, master.BodyText)
+	}
+	if json.Body != master.Body {
+		t.Errorf("ReadMultiPartMail(%q) returned JsonMail.Body == %q, want %q", eml, json.Body, master.Body)
+	}
 }
