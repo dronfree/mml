@@ -12,8 +12,8 @@ import (
 	"errors"
 	"encoding/base64"
 	"golang.org/x/text/encoding/charmap"
-	"fmt"
 	"time"
+	"mime/quotedprintable"
 )
 
 type JsonMail struct {
@@ -112,18 +112,58 @@ func ReadMultiPartMail(msg *mail.Message) (email JsonMail, err error) {
 	}
 	email.From = msg.Header.Get("From")
 	email.Subject = msg.Header.Get("Subject")
-	decoder := new(mime.WordDecoder)
-	decoder.CharsetReader = func(charset string, input io.Reader) (io.Reader, error) {
-		if "koi8-r" == charset {
-			return charmap.KOI8R.NewDecoder().Reader(input), nil
-		}
-		return nil, fmt.Errorf("unhandled charset for subject %q", charset)
-	}
+	decoder := WordDecoder()
 	decodedSubject, err := decoder.Decode(email.Subject)
 	if err == nil {
 		email.Subject = decodedSubject
 	}
 	return email, nil
+}
+
+func ReadPlainMail(msg *mail.Message) (email JsonMail, err error) {
+	const cte = "Content-Transfer-Encoding"
+	if msg.Header.Get(cte) == "quoted-printable" {
+		msg.Body = quotedprintable.NewReader(msg.Body)
+	}
+	body, err := ioutil.ReadAll(msg.Body)
+	if err != nil {
+		return email, errors.New("ERROR: reading non multipart mail body")
+
+	}
+	if msg.Header.Get(cte) == "base64" {
+		msg.Body = quotedprintable.NewReader(msg.Body)
+		body, err = base64.StdEncoding.DecodeString(string(body))
+		if err != nil {
+			return email, errors.New("ERROR: decoding base64")
+		}
+	}
+
+	b := `<pre>` + string(body) + `</pre>`
+	subject := msg.Header.Get("Subject")
+	decoder := WordDecoder()
+	decodedSubject, err := decoder.Decode(subject)
+	if err == nil {
+		subject = decodedSubject
+	}
+	email.Subject = subject
+	email.BodyText = b
+	email.Body = b;
+	email.From = msg.Header.Get("From");
+	return email, nil
+}
+
+
+func WordDecoder() *mime.WordDecoder {
+	decoder := new(mime.WordDecoder)
+	decoder.CharsetReader = CharsetReader
+	return decoder
+}
+
+func CharsetReader(charset string, input io.Reader) (io.Reader, error) {
+	if "koi8-r" == charset {
+		return charmap.KOI8R.NewDecoder().Reader(input), nil
+	}
+	return input, nil
 }
 
 func Read(boxPath string) (mails []JsonMail, err error) {
@@ -156,7 +196,6 @@ func Read(boxPath string) (mails []JsonMail, err error) {
 			return nil, err
 		}
 
-		header := msg.Header
 		var email JsonMail
 		if IsMultiPart(msg) {
 			email, err = ReadMultiPartMail(msg)
@@ -167,12 +206,13 @@ func Read(boxPath string) (mails []JsonMail, err error) {
 			email.Date = file.ModTime().Format(time.UnixDate)
 			email.Id = file.Name()
 		} else {
-			body, err := ioutil.ReadAll(msg.Body)
+			email, err = ReadPlainMail(msg)
 			if err != nil {
-				log.Println(`ERROR: reading non multipart mail body`, err)
+				log.Println(err)
+				continue
 			}
-			b := `<pre>` + string(body) + `</pre>`
-			email = JsonMail{file.Name(), file.ModTime().Format(time.UnixDate), header.Get("From"), header.Get("Subject"), b, "", b}
+			email.Date = file.ModTime().Format(time.UnixDate)
+			email.Id = file.Name()
 		}
 		mails = append(mails, email)
 	}
