@@ -16,6 +16,7 @@ import (
 	"net/url"
 	"errors"
 	"io/ioutil"
+	"sync"
 )
 
 type Params struct {
@@ -99,10 +100,12 @@ func main() {
 	http.HandleFunc("/", func (w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "Welcome from Mail boxes manager")
 	})
+	var mu sync.Mutex
 	http.HandleFunc("/box", func (w http.ResponseWriter, r *http.Request) {
 		var box string
 		var err error
 		var js []byte
+		mu.Lock()
 		if len(available) == 0 {
 			if js, err = json.Marshal(AllBoxBusy{"allbusy"}); err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -120,6 +123,7 @@ func main() {
 				log.Println(err)
 			}
 		}
+		mu.Unlock()
 		w.Header().Set("Content-Type", "application/json")
 		w.Write(js);
 	})
