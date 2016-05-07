@@ -249,7 +249,7 @@ func TestRead01(t *testing.T) {
 		log.Fatal(err)
 	}
 	// one mail is broken and it is skipped,
-	// so total amount of read mails less by 1
+	// so total amount of read mails decreased by 1
 	masterCount := 10-1
 	if len(mails) != masterCount {
 		t.Errorf("Read(%q) count returned mails == %v, want %v", "./testdata", len(mails), masterCount)
