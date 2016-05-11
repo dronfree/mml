@@ -1,0 +1,63 @@
+Return-Path: <noreply@veeam.com>
+X-Original-To: a2c@mmlhub.com
+Delivered-To: a2c@mmlhub.com
+Received: from vpcmail.veeam.com (unknown [52.0.137.221])
+	by localhost (Postfix) with ESMTP id B4385120
+	for <a2c@mmlhub.com>; Wed, 11 May 2016 11:01:04 +0000 (UTC)
+Received: from veeam.localdomain (unknown [192.168.11.67])
+	by vpcmail.veeam.com (Postfix) with ESMTP id 4B4E22072A46
+	for <a2c@mmlhub.com>; Wed, 11 May 2016 14:01:04 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=veeam.com;
+	s=vpcmail; t=1462964464; r=y;
+	bh=Kj83QAgi+BmFFY4QaX68Sx3JPgnrrelTmDgdP76YjIE=;
+	h=To:Subject:Date:From:Reply-To:From;
+	b=uUqciDdc1cfiUBbFOdYLMoSKO3WD7dztkjhweNzfCKsqf0X8BzMyaNm5SQKnrTETx
+	 FSxaTl2UWaQGcGqkbcquOUX1W7nVcByoOv+ukdxIFd4nXFxm5oV9ugNflLPsi9qgpV
+	 IzUkgfsr/2Tg5ocnK2uA84+gf2L7yVet6gF/xtY8=
+Received: by veeam.localdomain (Postfix, from userid 48)
+	id 49F848A5794; Wed, 11 May 2016 14:01:04 +0300 (MSK)
+To: asdasad asdsad <a2c@mmlhub.com>
+Subject: =?UTF-8?Q?Veeam_=E4=B8=8B=E8=BD=BD=E8=AF=A6=E7=BB=86=E4=BF=A1=E6=81=AF?=  =?UTF-8?Q?=EF=BC=9A_Veeam_Availability_Suite_9.0_for_VMware_and_Hyper-V?=
+X-PHP-Originating-Script: 1113:class.phpmailer.php
+Date: Wed, 11 May 2016 07:01:04 -0400
+From: Veeam Software <support@veeam.com>
+Reply-To: Veeam Software <support@veeam.com>
+Message-ID: <4ab5c488d7d36ec17375a40f409d693f@www.veeam.com>
+X-Priority: 3
+X-Mailer: PHPMailer (phpmailer.sourceforge.net) [version 2.0.4]
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+	boundary="b1_4ab5c488d7d36ec17375a40f409d693f"
+
+--b1_4ab5c488d7d36ec17375a40f409d693f
+Content-Type: text/plain; charset = "UTF-8"
+Content-Transfer-Encoding: 8bit
+
+å°Šæ•¬çš„ Asdasad,æ„Ÿè°¢æ‚¨ä¸‹è½½ Veeam Availability Suite 9.0 for VMware and Hyper-V.è®¸å¯è¯å¯†é’¥ï¼šæ‚¨éœ€è¦è®¸å¯è¯æ‰å¯å®‰è£… Veeam äº§å“ã€‚æ‚¨å¯ä»¥é€šè¿‡è®¿é—® Veeam è®¸å¯è¯ç®¡ç†é—¨æˆ·èŽ·å–äº§å“è®¸å¯è¯ï¼šæˆ‘çš„å¸æˆ· > ç®¡ç†è®¸å¯è¯ï¼šhttp://www.veeam.com/manage_licenses.htmläº§å“ä¸‹è½½ï¼šVeeam Availability Suite 9.0 for VMware and Hyper-Væˆ‘ä»¬å·²ç»æ ¹æ®å®¢æˆ·çš„åé¦ˆæ„è§æ”¹è¿›äº†æˆ‘ä»¬çš„äº§å“ã€‚å¦‚æžœæ‚¨å¯¹ Veeam Availability Suite 9.0 for VMware and Hyper-V .æœ‰ä»»ä½•ç–‘é—®ï¼Œè¯·å¼ è´´åœ¨ Veeam ç¤¾åŒºè®ºå›ä¸Šã€‚å¸æˆ·ï¼šç®¡ç†è®¸å¯è¯å¯†é’¥ï¼š
+            http://www.veeam.com/manage_licenses.html
+            è”ç³»é”€å”®å›¢é˜Ÿï¼š http://www.veeam.com/account-contact-sales.htmlèŽ·å–å¸®åŠ©ï¼š http://www.veeam.com/support.html
+            ä¸‹è½½ Veeam äº§å“ï¼š http://www.veeam.com/account-downloads.html
+            è‡´æ„ï¼ŒVeeam å›¢é˜Ÿ
+
+
+--b1_4ab5c488d7d36ec17375a40f409d693f
+Content-Type: text/html; charset = "UTF-8"
+Content-Transfer-Encoding: 8bit
+
+<html><head><style>
+<!--
+* {font-family: Tahoma, Verdana; font-size: 12px; color: #333333;}
+th {color: #9cb5b3; font-size:11px; font-weight: bold; text-align: left; padding: 0px;}
+a:link, a:visited, a:active {color: #3882ce;font-weight:normal;text-decoration:none;}
+a:hover {color: #76a913;font-weight:normal;text-decoration:underline;}
+-->
+</style></head><body><p style="font-family: Tahoma; font-size: 12px; color: #333333;">å°Šæ•¬çš„ Asdasad,</p><p style="font-family: Tahoma; font-size: 12px; color: #333333;">æ„Ÿè°¢æ‚¨ä¸‹è½½ Veeam Availability Suite 9.0 for VMware and Hyper-V.</p><p style="font-family: Tahoma; font-size: 12px; color: #333333;"><b>è®¸å¯è¯å¯†é’¥ï¼š</b><br />æ‚¨éœ€è¦è®¸å¯è¯æ‰å¯å®‰è£… Veeam äº§å“ã€‚æ‚¨å¯ä»¥é€šè¿‡è®¿é—® Veeam è®¸å¯è¯ç®¡ç†é—¨æˆ·èŽ·å–äº§å“è®¸å¯è¯ï¼š<br/>æˆ‘çš„å¸æˆ· > ç®¡ç†è®¸å¯è¯ï¼š<a href="http://www.veeam.com/manage_licenses.html?ad=download_email">http://www.veeam.com/manage_licenses.html</a></p></p><p style='font-family: Tahoma; font-size: 12px; color: #333333;'><b>äº§å“ä¸‹è½½ï¼š</b><br /><a href='http://www.veeam.com/download_add_packs/data-center-availability-suite/vas9/'>Veeam Availability Suite 9.0 for VMware and Hyper-V</a></p><p style="font-family: Tahoma; font-size: 12px; color: #333333;">æˆ‘ä»¬å·²ç»æ ¹æ®å®¢æˆ·çš„åé¦ˆæ„è§æ”¹è¿›äº†æˆ‘ä»¬çš„äº§å“ã€‚å¦‚æžœæ
+ ‚¨å¯¹ Veeam Availability Suite 9.0 for VMware and Hyper-V .æœ‰ä»»ä½•ç–‘é—®ï¼Œè¯·å¼ è´´åœ¨ <a href="http://forums.veeam.com/?ad=download_email">Veeam ç¤¾åŒºè®ºå›ä¸Š</a>ã€‚</p><p style='font-family: Tahoma; font-size: 12px; color: #333333;'><b>å¸æˆ·ï¼š</b><br />ç®¡ç†è®¸å¯è¯å¯†é’¥ï¼š
+            <a href='http://www.veeam.com/manage_licenses.html?ad=download_email'>http://www.veeam.com/manage_licenses.html</a><br />
+            è”ç³»é”€å”®å›¢é˜Ÿï¼š <a href='http://www.veeam.com/account-contact-sales.html?ad=download_email'>http://www.veeam.com/account-contact-sales.html</a><br />èŽ·å–å¸®åŠ©ï¼š <a href='http://www.veeam.com/support.html?ad=download_email'>http://www.veeam.com/support.html</a><br />
+            ä¸‹è½½ Veeam äº§å“ï¼š <a href='http://www.veeam.com/account-downloads.html?ad=download_email'>http://www.veeam.com/account-downloads.html</a><br />
+            <p style='font-family: Tahoma; font-size: 12px; color: #333333;'>è‡´æ„ï¼Œ<br/>Veeam å›¢é˜Ÿ</p></body></html>
+
+
+
+--b1_4ab5c488d7d36ec17375a40f409d693f--
