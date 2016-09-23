@@ -1,5 +1,5 @@
 #!/bin/bash
-docker rm -f postfix
+docker rm -f postfixmml
 cp main.cf.dist main.cf
 sed -i s/mail.local/$2/g main.cf
 cp master.cf.dist master.cf
@@ -8,5 +8,5 @@ POSTFIX_PORT="25"
 if [ "$4" != "" ]; then
     POSTFIX_PORT=$4
 fi
-docker run --name postfix --volumes-from cdc --volumes-from mbs -d -p $POSTFIX_PORT:25 -t postfix
+docker run --name postfixmml --volumes-from cdc --volumes-from mbs -d -p $POSTFIX_PORT:25 -t postfix
 
